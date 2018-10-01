@@ -443,8 +443,13 @@ void  InputStrDialog::UpdateEnable(void)
     int ena1=(StreamC1->isChecked()&&(Stream1->currentIndex()==4))||
              (StreamC2->isChecked()&&(Stream2->currentIndex()==4))||
              (StreamC3->isChecked()&&(Stream3->currentIndex()==4));
+    int enaTC1=(StreamC1->isChecked()&&(Stream1->currentIndex()==4)&&QFileInfo(FilePath1->text()+".tag").exists());
+    int enaTC2=((StreamC2->isChecked()&&(Stream2->currentIndex()==4)&&QFileInfo(FilePath2->text()+".tag").exists())||((!StreamC2->isChecked()) && (!StreamC3->isChecked())));
+    int enaTC3=((StreamC3->isChecked()&&(Stream3->currentIndex()==4)&&QFileInfo(FilePath3->text()+".tag").exists())||(!StreamC3->isChecked()));
+
+
     int enaTC=(StreamC1->isChecked()&&(Stream1->currentIndex()==4)&&QFileInfo(FilePath1->text()+".tag").exists())&&
-              ((StreamC2->isChecked()&&(Stream2->currentIndex()==4)&&QFileInfo(FilePath2->text()+".tag").exists())||((!StreamC2->isChecked()) && (StreamC3->isChecked())))&&
+              ((StreamC2->isChecked()&&(Stream2->currentIndex()==4)&&QFileInfo(FilePath2->text()+".tag").exists())||((!StreamC2->isChecked()) && (!StreamC3->isChecked())))&&
               ((StreamC3->isChecked()&&(Stream3->currentIndex()==4)&&QFileInfo(FilePath3->text()+".tag").exists())||(!StreamC3->isChecked()));
     int ena2=StreamC2->isChecked()&&(Stream2->currentIndex()<=3);
 	
