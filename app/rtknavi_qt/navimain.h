@@ -129,7 +129,7 @@ public:
 	
 	int PanelStack,PanelMode;
 	int SvrCycle,SvrBuffSize,Scale,SolBuffSize,NavSelect,SavedSol;
-	int NmeaReq,NmeaCycle,InTimeTag,OutTimeTag,OutAppend,LogTimeTag,LogAppend;
+	int NmeaReq,NmeaCycle,InTimeTag,InTime64Bit,OutTimeTag,OutAppend,LogTimeTag,LogAppend;
 	int TimeoutTime,ReconTime,SbasCorr,DgpsCorr,TideCorr,FileSwapMargin;
 	int Stream[MAXSTRRTK],StreamC[MAXSTRRTK],Format[MAXSTRRTK];
 	int CmdEna[3][3],CmdEnaTcp[3][3];

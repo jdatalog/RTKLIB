@@ -196,11 +196,11 @@ void OptDialog::BtnSaveClick()
 {
     QString file;
 
-    file=QDir::toNativeSeparators(QFileDialog::getOpenFileName(this,tr("Save Options..."),QString(),tr("Options File (*.conf);;All (*.*)")));
-
-    if (!file.contains('.')) file+=".conf";
-
-    SaveOpt(file);
+    file=QDir::toNativeSeparators(QFileDialog::getSaveFileName(this,tr("Save Options..."),QString(),tr("Options File (*.conf);;All (*.*)")));
+    QFileInfo f(file);
+    if (f.suffix()=="") file=file+".conf";
+	SaveOpt(file);
+        
 }
 //---------------------------------------------------------------------------
 void OptDialog::BtnStaPosViewClick()
@@ -454,6 +454,8 @@ void OptDialog::GetOpt(void)
     GloAmbRes	 ->setCurrentIndex(PrcOpt.glomodear);
     BdsAmbRes	 ->setCurrentIndex(PrcOpt.bdsmodear);
     ValidThresAR ->setText(QString::number(PrcOpt.thresar[0]));
+    MaxPosVarAR  ->setText(QString::number(PrcOpt.thresar[1])); // #CG
+    GloHwBias    ->setText(QString::number(PrcOpt.thresar[2])); // #CG
     OutCntResetAmb->setText(QString::number(PrcOpt.maxout));
     LockCntFixAmb->setText(QString::number(PrcOpt.minlock));
     FixCntHoldAmb->setText(QString::number(PrcOpt.minfix));
@@ -462,9 +464,17 @@ void OptDialog::GetOpt(void)
     MaxAgeDiff	 ->setText(QString::number(PrcOpt.maxtdiff));
     RejectGdop   ->setText(QString::number(PrcOpt.maxgdop));
     RejectThres  ->setText(QString::number(PrcOpt.maxinno));
+    VarHoldAmb   ->setText(QString::number(PrcOpt.varholdamb));
+    GainHoldAmb  ->setText(QString::number(PrcOpt.gainholdamb));
     SlipThres	 ->setText(QString::number(PrcOpt.thresslip));
-    NumIter		 ->setText(QString::number(PrcOpt.niter));
+    ARIter	 ->setText(QString::number(PrcOpt.armaxiter));
+    NumIter	 ->setText(QString::number(PrcOpt.niter));
+    MinFixSats   ->setText(QString::number(PrcOpt.minfixsats));
+    MinHoldSats  ->setText(QString::number(PrcOpt.minholdsats));
+    MinDropSats	 ->setText(QString::number(PrcOpt.mindropsats));
     SyncSol		 ->setCurrentIndex(PrcOpt.syncsol);
+    ARFilter	         ->setCurrentIndex(PrcOpt.arfilter);
+    RcvStds	         ->setCurrentIndex(PrcOpt.rcvstds);
     ExSatsE		 ->setText(ExSats);
     NavSys1		 ->setChecked(PrcOpt.navsys&SYS_GPS);
     NavSys2		 ->setChecked(PrcOpt.navsys&SYS_GLO);
@@ -478,6 +488,7 @@ void OptDialog::GetOpt(void)
     PosOpt3		 ->setChecked(PrcOpt.posopt[2]);
     PosOpt4		 ->setChecked(PrcOpt.posopt[3]);
     PosOpt5		 ->setChecked(PrcOpt.posopt[4]);
+    PosOpt6		 ->setChecked(PrcOpt.posopt[5]);
 	
     SolFormat	 ->setCurrentIndex(SolOpt.posf);
     TimeFormat	 ->setCurrentIndex(SolOpt.timef==0?0:SolOpt.times+1);
@@ -486,6 +497,8 @@ void OptDialog::GetOpt(void)
     FieldSep	 ->setText(SolOpt.sep);
     OutputHead	 ->setCurrentIndex(SolOpt.outhead);
     OutputOpt	 ->setCurrentIndex(SolOpt.outopt);
+    OutputSingle ->setCurrentIndex(PrcOpt.outsingle);
+    MaxSolStd	     ->setText(QString::number(SolOpt.maxsolstd));
     OutputDatum  ->setCurrentIndex(SolOpt.datum);
     OutputHeight ->setCurrentIndex(SolOpt.height);
     OutputGeoid  ->setCurrentIndex(SolOpt.geoid);
@@ -517,6 +530,8 @@ void OptDialog::GetOpt(void)
     RefPosTypeP	 ->setCurrentIndex(RefPosTypeF);
     RovAntPcv	 ->setChecked(RovAntPcvF);
     RefAntPcv	 ->setChecked(RefAntPcvF);
+    RovAnt		 ->setCurrentIndex(RovAnt->findText(RovAntF));
+    RefAnt		 ->setCurrentIndex(RefAnt->findText(RefAntF));
     RovAntE		 ->setText(QString::number(RovAntDel[0]));
     RovAntN		 ->setText(QString::number(RovAntDel[1]));
     RovAntU		 ->setText(QString::number(RovAntDel[2]));
@@ -535,10 +550,7 @@ void OptDialog::GetOpt(void)
     TLEFile      ->setText(TLEFileF);
     TLESatFile   ->setText(TLESatFileF);
     LocalDir	 ->setText(LocalDirectory);
-	ReadAntList();
-
-    RovAnt		 ->setCurrentIndex(RovAnt->findText(RovAntF));
-    RefAnt		 ->setCurrentIndex(RefAnt->findText(RefAntF));
+    ReadAntList();
 
     SvrCycleE	 ->setText(QString::number(SvrCycle));
     TimeoutTimeE ->setText(QString::number(TimeoutTime));
@@ -579,6 +591,8 @@ void OptDialog::SetOpt(void)
     PrcOpt.glomodear =GloAmbRes   ->currentIndex();
     PrcOpt.bdsmodear =BdsAmbRes   ->currentIndex();
     PrcOpt.thresar[0]=ValidThresAR->text().toDouble();
+    PrcOpt.thresar[1]=MaxPosVarAR->text().toDouble();
+    PrcOpt.thresar[2]=GloHwBias->text().toDouble();
     PrcOpt.maxout    =OutCntResetAmb->text().toInt();
     PrcOpt.minlock   =LockCntFixAmb->text().toInt();
     PrcOpt.minfix    =FixCntHoldAmb->text().toInt();
@@ -587,12 +601,19 @@ void OptDialog::SetOpt(void)
     PrcOpt.maxtdiff  =MaxAgeDiff ->text().toDouble();
     PrcOpt.maxgdop   =RejectGdop ->text().toDouble();
     PrcOpt.maxinno   =RejectThres->text().toDouble();
+    PrcOpt.varholdamb=VarHoldAmb->text().toDouble();
+    PrcOpt.gainholdamb=GainHoldAmb->text().toDouble();
     PrcOpt.thresslip =SlipThres  ->text().toDouble();
+    PrcOpt.armaxiter =ARIter	   ->text().toInt();
+    PrcOpt.minfixsats =MinFixSats ->text().toInt();
+    PrcOpt.minholdsats =MinHoldSats->text().toInt();
+    PrcOpt.mindropsats =MinDropSats->text().toInt();
     PrcOpt.niter     =NumIter     ->text().toInt();
     PrcOpt.syncsol   =SyncSol     ->currentIndex();
+    PrcOpt.arfilter  =ARFilter   ->currentIndex();
+    PrcOpt.rcvstds   =RcvStds    ->currentIndex();
     ExSats			 =ExSatsE	  ->text();
-	PrcOpt.navsys    =0;
-
+    PrcOpt.navsys    =0;
     if (NavSys1->isChecked()) PrcOpt.navsys|=SYS_GPS;
     if (NavSys2->isChecked()) PrcOpt.navsys|=SYS_GLO;
     if (NavSys3->isChecked()) PrcOpt.navsys|=SYS_GAL;
@@ -605,6 +626,7 @@ void OptDialog::SetOpt(void)
     PrcOpt.posopt[2] =PosOpt3   ->isChecked();
     PrcOpt.posopt[3] =PosOpt4   ->isChecked();
     PrcOpt.posopt[4] =PosOpt5   ->isChecked();
+    PrcOpt.posopt[5] =PosOpt6   ->isChecked();
 	
     SolOpt.posf      =SolFormat   ->currentIndex();
     SolOpt.timef     =TimeFormat->currentIndex()==0?0:1;
@@ -614,6 +636,8 @@ void OptDialog::SetOpt(void)
     strcpy(SolOpt.sep,qPrintable(FieldSep_Text));
     SolOpt.outhead   =OutputHead  ->currentIndex();
     SolOpt.outopt    =OutputOpt   ->currentIndex();
+    PrcOpt.outsingle =OutputSingle->currentIndex();
+    SolOpt.maxsolstd =MaxSolStd->text().toDouble();
     SolOpt.datum     =OutputDatum ->currentIndex();
     SolOpt.height    =OutputHeight->currentIndex();
     SolOpt.geoid     =OutputGeoid ->currentIndex();
@@ -679,9 +703,9 @@ void OptDialog::SetOpt(void)
     ProxyAddr        =ProxyAddrE  ->text();
     MoniPort         =MoniPortE   ->text().toInt();
     PanelStack       =PanelStackE ->currentIndex();
+    
     PosFont=FontLabel->font();
-
-	UpdateEnable();
+    UpdateEnable();
 }
 //---------------------------------------------------------------------------
 void OptDialog::LoadOpt(const QString &file)
@@ -692,14 +716,14 @@ void OptDialog::LoadOpt(const QString &file)
     QLineEdit *editr[]={RefPos1,RefPos2,RefPos3};
     QString buff;
     char id[32];
-	int sat;
-	prcopt_t prcopt=prcopt_default;
-	solopt_t solopt=solopt_default;
+    int sat;
+    prcopt_t prcopt=prcopt_default;
+    solopt_t solopt=solopt_default;
     filopt_t filopt;
 
     memset(&filopt,0,sizeof(filopt_t));
-	
-	resetsysopts();
+    resetsysopts();
+    
     if (!loadopts(qPrintable(file),sysopts)||
         !loadopts(qPrintable(file),rcvopts)) return;
 	getsysopts(&prcopt,&solopt,&filopt);
@@ -761,11 +785,14 @@ void OptDialog::LoadOpt(const QString &file)
     PosOpt3		 ->setChecked(prcopt.posopt[2]);
     PosOpt4		 ->setChecked(prcopt.posopt[3]);
     PosOpt5		 ->setChecked(prcopt.posopt[4]);
+    PosOpt6		 ->setChecked(prcopt.posopt[5]);
 	
-    AmbRes		 ->setCurrentIndex(prcopt.modear);
+    AmbRes	 ->setCurrentIndex(prcopt.modear);
     GloAmbRes	 ->setCurrentIndex(prcopt.glomodear);
     BdsAmbRes	 ->setCurrentIndex(prcopt.bdsmodear);
     ValidThresAR ->setText(QString::number(prcopt.thresar[0],'f',1));
+    MaxPosVarAR  ->setText(QString::number(prcopt.thresar[1],'f',3));
+    GloHwBias    ->setText(QString::number(prcopt.thresar[2],'f',3));
     OutCntResetAmb->setText(QString::number(prcopt.maxout   ));
     FixCntHoldAmb->setText(QString::number(prcopt.minfix   ));
     LockCntFixAmb->setText(QString::number(prcopt.minlock  ));
@@ -774,9 +801,17 @@ void OptDialog::LoadOpt(const QString &file)
     MaxAgeDiff	 ->setText(QString::number(prcopt.maxtdiff ,'f',1));
     RejectGdop   ->setText(QString::number(prcopt.maxgdop  ,'f',1));
     RejectThres  ->setText(QString::number(prcopt.maxinno  ,'f',1));
+    VarHoldAmb  ->setText(QString::number(prcopt.varholdamb,'f',4));
+    GainHoldAmb ->setText(QString::number(prcopt.gainholdamb,'f',4));
     SlipThres	 ->setText(QString::number(prcopt.thresslip,'f',3));
+    ARIter	 ->setText(QString::number(prcopt.armaxiter));
+    MinFixSats  ->setText(QString::number(prcopt.minfixsats));
+    MinHoldSats ->setText(QString::number(prcopt.minholdsats));
+    MinDropSats ->setText(QString::number(prcopt.mindropsats));
     NumIter		 ->setText(QString::number(prcopt.niter    ));
     SyncSol		 ->setCurrentIndex(prcopt.syncsol);
+    ARFilter	 ->setCurrentIndex(prcopt.arfilter);
+    RcvStds	 ->setCurrentIndex(prcopt.rcvstds);
     BaselineLen	 ->setText(QString::number(prcopt.baseline[0],'f',3));
     BaselineSig	 ->setText(QString::number(prcopt.baseline[1],'f',3));
     BaselineConst->setChecked(prcopt.baseline[0]>0.0);
@@ -788,6 +823,8 @@ void OptDialog::LoadOpt(const QString &file)
     FieldSep	 ->setText(solopt.sep);
     OutputHead	 ->setCurrentIndex(solopt.outhead);
     OutputOpt	 ->setCurrentIndex(solopt.outopt);
+    OutputSingle ->setCurrentIndex(prcopt.outsingle);
+    MaxSolStd    ->setText(QString::number(solopt.maxsolstd, 'f',2));
     OutputDatum  ->setCurrentIndex(solopt.datum);
     OutputHeight ->setCurrentIndex(solopt.height);
     OutputGeoid  ->setCurrentIndex(solopt.geoid);
@@ -820,7 +857,6 @@ void OptDialog::LoadOpt(const QString &file)
     RefAntN		 ->setText(QString::number(prcopt.antdel[1][1],'f',4));
     RefAntU		 ->setText(QString::number(prcopt.antdel[1][2],'f',4));
     MaxAveEp	 ->setValue(prcopt.maxaveep);
-	
     ChkInitRestart->setChecked(prcopt.initrst);
 
     RovPosTypeP	 ->setCurrentIndex(0);
@@ -841,8 +877,8 @@ void OptDialog::LoadOpt(const QString &file)
     DCBFile    ->setText(filopt.dcb);
     LocalDir   ->setText(filopt.tempdir);
 	
-	ReadAntList();
-	UpdateEnable();
+    ReadAntList();
+    UpdateEnable();
 }
 //---------------------------------------------------------------------------
 void OptDialog::SaveOpt(const QString &file)
@@ -862,14 +898,14 @@ void OptDialog::SaveOpt(const QString &file)
     QLineEdit *editu[]={RovPos1,RovPos2,RovPos3};
     QLineEdit *editr[]={RefPos1,RefPos2,RefPos3};
     char buff[1024],*p,comment[256],s[64];
-	int sat,ex;
-	prcopt_t prcopt=prcopt_default;
-	solopt_t solopt=solopt_default;
+    int sat,ex;
+    prcopt_t prcopt=prcopt_default;
+    solopt_t solopt=solopt_default;
     filopt_t filopt;
 	
     memset(&filopt,0,sizeof(filopt_t));
 
-	for (int i=0;i<8;i++) {
+    for (int i=0;i<8;i++) {
         strtype[i]=i<3?itype[mainForm->Stream[i]]:otype[mainForm->Stream[i]];
         strfmt[i]=mainForm->Format[i];
 		
@@ -933,11 +969,14 @@ void OptDialog::SaveOpt(const QString &file)
     prcopt.posopt[2]=PosOpt3->isChecked();
     prcopt.posopt[3]=PosOpt4->isChecked();
     prcopt.posopt[4]=PosOpt5->isChecked();
+    prcopt.posopt[5]=PosOpt5->isChecked();
 	
     prcopt.modear	=AmbRes		->currentIndex();
     prcopt.glomodear=GloAmbRes	->currentIndex();
     prcopt.bdsmodear=BdsAmbRes	->currentIndex();
     prcopt.thresar[0]=ValidThresAR->text().toDouble();
+    prcopt.thresar[1]=MaxPosVarAR->text().toDouble();
+    prcopt.thresar[2]=GloHwBias->text().toDouble();
     prcopt.maxout	=OutCntResetAmb->text().toInt();
     prcopt.minfix	=FixCntHoldAmb->text().toInt();
     prcopt.minlock	=LockCntFixAmb->text().toInt();
@@ -946,9 +985,17 @@ void OptDialog::SaveOpt(const QString &file)
     prcopt.maxtdiff	=MaxAgeDiff	->text().toDouble();
     prcopt.maxgdop	=RejectGdop ->text().toDouble();
     prcopt.maxinno	=RejectThres->text().toDouble();
+    prcopt.varholdamb=VarHoldAmb->text().toDouble();
+    prcopt.gainholdamb=GainHoldAmb->text().toDouble();
     prcopt.thresslip=SlipThres	->text().toDouble();
+    prcopt.armaxiter=ARIter->text().toDouble();
+    prcopt.minfixsats=MinFixSats->text().toDouble();
+    prcopt.minholdsats=MinHoldSats->text().toDouble();
+    prcopt.mindropsats=MinDropSats->text().toDouble();
     prcopt.niter	=NumIter	->text().toInt();
     prcopt.syncsol	=SyncSol->currentIndex();
+    prcopt.arfilter =ARFilter->currentIndex();
+    prcopt.rcvstds  =RcvStds->currentIndex();
     if (prcopt.mode==PMODE_MOVEB&&BaselineConst->isChecked()) {
         prcopt.baseline[0]=BaselineLen->text().toDouble();
         prcopt.baseline[1]=BaselineSig->text().toDouble();
@@ -961,6 +1008,8 @@ void OptDialog::SaveOpt(const QString &file)
     strcpy(solopt.sep,qPrintable(FieldSep_Text));
     solopt.outhead	=OutputHead	 ->currentIndex();
     solopt.outopt	=OutputOpt	 ->currentIndex();
+    prcopt.outsingle=OutputSingle->currentIndex();
+    solopt.maxsolstd=MaxSolStd->text().toDouble();
     solopt.datum	=OutputDatum ->currentIndex();
     solopt.height	=OutputHeight->currentIndex();
     solopt.geoid	=OutputGeoid ->currentIndex();
@@ -1031,13 +1080,14 @@ void OptDialog::UpdateEnable(void)
     PosOpt2        ->setEnabled(ppp);
     PosOpt3        ->setEnabled(ppp);
     PosOpt4        ->setEnabled(ppp);
+    PosOpt6        ->setEnabled(ppp);
 	
     AmbRes         ->setEnabled(ar);
     GloAmbRes      ->setEnabled(ar&&AmbRes->currentIndex()>0&&NavSys2->isChecked());
     BdsAmbRes      ->setEnabled(ar&&AmbRes->currentIndex()>0&&NavSys6->isChecked());
     ValidThresAR   ->setEnabled(ar&&AmbRes->currentIndex()>=1&&AmbRes->currentIndex()<4);
-    ThresAR2       ->setEnabled(ar&&AmbRes->currentIndex()>=4);
-    ThresAR3       ->setEnabled(ar&&AmbRes->currentIndex()>=4);
+    MaxPosVarAR    ->setEnabled(ar&&!ppp);
+    GloHwBias      ->setEnabled(ar&&GloAmbRes->currentIndex()==2);
     LockCntFixAmb  ->setEnabled(ar&&AmbRes->currentIndex()>=1);
     ElMaskAR       ->setEnabled(ar&&AmbRes->currentIndex()>=1);
     OutCntResetAmb ->setEnabled(ar||ppp);
@@ -1047,7 +1097,15 @@ void OptDialog::UpdateEnable(void)
     MaxAgeDiff     ->setEnabled(rel);
     RejectThres    ->setEnabled(rel||ppp);
     NumIter        ->setEnabled(rel||ppp);
+    VarHoldAmb    ->setEnabled(ar&&AmbRes->currentIndex()==3);
+    GainHoldAmb   ->setEnabled(ar&&AmbRes->currentIndex()==3);
+    ARIter	   ->setEnabled(ppp);
+    MinFixSats     ->setEnabled(ar||ppp);
+    MinHoldSats    ->setEnabled(ar||ppp);
+    MinDropSats    ->setEnabled(ar||ppp);
     SyncSol        ->setEnabled(rel||ppp);
+    ARFilter	   ->setEnabled(ar||ppp);
+    RcvStds	   ->setEnabled(rel);
     BaselineConst  ->setEnabled(PosMode->currentIndex()==PMODE_MOVEB);
     BaselineLen    ->setEnabled(BaselineConst->isChecked()&&PosMode->currentIndex()==PMODE_MOVEB);
     BaselineSig    ->setEnabled(BaselineConst->isChecked()&&PosMode->currentIndex()==PMODE_MOVEB);
@@ -1058,6 +1116,7 @@ void OptDialog::UpdateEnable(void)
     TimeDecimal    ->setEnabled(SolFormat->currentIndex()!=3);
     LatLonFormat   ->setEnabled(SolFormat->currentIndex()==0);
     FieldSep       ->setEnabled(SolFormat->currentIndex()!=3);
+    OutputSingle  ->setEnabled(PosMode->currentIndex()!=0);
     OutputDatum    ->setEnabled(SolFormat->currentIndex()==0);
     OutputHeight   ->setEnabled(SolFormat->currentIndex()==0);
     OutputGeoid    ->setEnabled(SolFormat->currentIndex()==0&&OutputHeight->currentIndex()==1);

@@ -808,6 +808,7 @@ static int readfile(file_t *file, unsigned char *buff, int nmax, char *msg)
                 break;
             }
             file->fpos_n=file->size_fpos==4?(size_t)fpos_4B:(size_t)fpos_8B;
+            printf( "=> [Twhile] t:%d tick:%d fpos:%d fpos_n:%d fpos_tag:%d file path:%s\n", t, file->tick_n, ftell(file->fp),file->fpos_n, ftell(file->fp_tag),file->path);
         }
         sprintf(msg,"T%+.1fs",(int)t*0.001);
         file->wtime = timeadd(file->time,(int)t*0.001);
@@ -818,6 +819,7 @@ static int readfile(file_t *file, unsigned char *buff, int nmax, char *msg)
         }
 	
         if (!file->repmode) tick_master = file->tick_n;
+        printf( "=> [T%d] tick:%u nmax:%d file path:%s\n", file->size_fpos, file->tick_n, nmax, file->path);
     }
     if (nmax>0) {
         nr=(int)fread(buff,1,nmax,file->fp);

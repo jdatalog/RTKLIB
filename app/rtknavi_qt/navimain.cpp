@@ -205,7 +205,6 @@ void  MainWindow::showEvent(QShowEvent *event)
     connect(BtnExit,SIGNAL(clicked()),this,SLOT(BtnExitClick()));
     connect(BtnStart,SIGNAL(clicked()),this,SLOT(BtnStartClick()));
     connect(BtnStop,SIGNAL(clicked()),this,SLOT(BtnStopClick()));
-    connect(BtnPlot,SIGNAL(clicked()),this,SLOT(BtnPlotClick()));
     connect(BtnAbout,SIGNAL(clicked(bool)),this,SLOT(BtnAboutClick()));
     connect(BtnFreqType1,SIGNAL(clicked(bool)),this,SLOT(BtnFreqType1Click()));
     connect(BtnFreqType2,SIGNAL(clicked(bool)),this,SLOT(BtnFreqType2Click()));
@@ -523,6 +522,7 @@ void  MainWindow::BtnInputStrClick()
     inputStrDialog->TimeTag   =InTimeTag;
     inputStrDialog->TimeSpeed =InTimeSpeed;
     inputStrDialog->TimeStart =InTimeStart;
+    inputStrDialog->Time64Bit =InTime64Bit;
     inputStrDialog->NmeaPos[0]=NmeaPos[0];
     inputStrDialog->NmeaPos[1]=NmeaPos[1];
     
@@ -551,6 +551,7 @@ void  MainWindow::BtnInputStrClick()
     InTimeTag  =inputStrDialog->TimeTag;
     InTimeSpeed=inputStrDialog->TimeSpeed;
     InTimeStart=inputStrDialog->TimeStart;
+    InTime64Bit=inputStrDialog->Time64Bit;
     NmeaPos[0] =inputStrDialog->NmeaPos[0];
     NmeaPos[1] =inputStrDialog->NmeaPos[1];
 }
@@ -2352,6 +2353,7 @@ void  MainWindow::LoadOpt(void)
     InTimeTag       =settings.value("setting/intimetag",       0).toInt();
     InTimeSpeed     =settings.value("setting/intimespeed",  "x1").toString();
     InTimeStart     =settings.value("setting/intimestart",   "0").toString();
+    InTime64Bit     =settings.value("setting/intime64bit",   sizeof (size_t) == 4 ? 0 : 1  ).toInt();
     OutTimeTag      =settings.value("setting/outtimetag",      0).toInt();
     OutAppend       =settings.value("setting/outappend",       0).toInt();
     OutSwapInterval =settings.value("setting/outswapinterval","").toString();
@@ -2550,6 +2552,7 @@ void  MainWindow::SaveOpt(void)
     settings.setValue("setting/nmeareq",    NmeaReq            );
     settings.setValue("setting/intimetag",  InTimeTag          );
     settings.setValue("setting/intimespeed",InTimeSpeed        );
+    settings.setValue("setting/intime64bit",InTime64Bit        );
     settings.setValue("setting/intimestart",InTimeStart        );
     settings.setValue("setting/outtimetag", OutTimeTag         );
     settings.setValue("setting/outappend",  OutAppend          );

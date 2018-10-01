@@ -445,8 +445,8 @@ void OptDialog::GetOpt(void)
     GloAmbRes	 ->setCurrentIndex(mainForm->GloAmbRes);
     BdsAmbRes	 ->setCurrentIndex(mainForm->BdsAmbRes);
     ValidThresAR ->setText(QString::number(mainForm->ValidThresAR,'g',3));
-    ThresAR2     ->setText(QString::number(mainForm->ThresAR2,'g',8));
-    ThresAR3     ->setText(QString::number(mainForm->ThresAR3,'g',3));
+    MaxPosVarAR  ->setText(QString::number(mainForm->MaxPosVarAR,'f',4));
+    GloHwBias    ->setText(QString::number(mainForm->GloHwBias,'g',3));
     OutCntResetAmb->setText(QString::number(mainForm->OutCntResetAmb));
     FixCntHoldAmb->setText(QString::number(mainForm->FixCntHoldAmb));
     LockCntFixAmb->setText(QString::number(mainForm->LockCntFixAmb));
@@ -455,9 +455,17 @@ void OptDialog::GetOpt(void)
     MaxAgeDiff	 ->setText(QString::number(mainForm->MaxAgeDiff,'f',1));
     RejectGdop   ->setText(QString::number(mainForm->RejectGdop,'f',1));
     RejectThres  ->setText(QString::number(mainForm->RejectThres,'f',1));
+    VarHoldAmb   ->setText(QString::number(mainForm->VarHoldAmb));
+    GainHoldAmb  ->setText(QString::number(mainForm->GainHoldAmb));
     SlipThres	 ->setText(QString::number(mainForm->SlipThres,'f',3));
     ARIter		 ->setText(QString::number(mainForm->ARIter));
     NumIter		 ->setText(QString::number(mainForm->NumIter));
+    MinFixSats   ->setText(QString::number(mainForm->MinFixSats));
+    MinHoldSats  ->setText(QString::number(mainForm->MinHoldSats));
+    MinDropSats	 ->setText(QString::number(mainForm->MinDropSats));
+    SyncSol		 ->setCurrentIndex(mainForm->SyncSol);
+    ARFilter	         ->setCurrentIndex(mainForm->ARFilter);
+    RcvStds	         ->setCurrentIndex(mainForm->RcvStds);
     BaselineLen	 ->setText(QString::number(mainForm->BaseLine[0],'f',3));
     BaselineSig	 ->setText(QString::number(mainForm->BaseLine[1],'f',3));
     BaselineConst->setChecked(mainForm->BaseLineConst);
@@ -469,6 +477,8 @@ void OptDialog::GetOpt(void)
     FieldSep	 ->setText(mainForm->FieldSep);
     OutputHead	 ->setCurrentIndex(mainForm->OutputHead);
     OutputOpt	 ->setCurrentIndex(mainForm->OutputOpt);
+    OutputSingle ->setCurrentIndex(mainForm->OutputSingle);
+    MaxSolStd	     ->setText(QString::number(mainForm->MaxSolStd));
     OutputDatum  ->setCurrentIndex(mainForm->OutputDatum);
     OutputHeight ->setCurrentIndex(mainForm->OutputHeight);
     OutputGeoid  ->setCurrentIndex(mainForm->OutputGeoid);
@@ -491,6 +501,8 @@ void OptDialog::GetOpt(void)
 	
     RovAntPcv	 ->setChecked(mainForm->RovAntPcv);
     RefAntPcv	 ->setChecked(mainForm->RefAntPcv);
+ //CG   RovAnt		 ->setCurrentIndex(RovAnt->findText(RovAnt));
+ //CG   RefAnt		 ->setCurrentIndex(RefAnt->findText(RefAnt));
     RovAntE		 ->setText(QString::number(mainForm->RovAntE,'f',4));
     RovAntN		 ->setText(QString::number(mainForm->RovAntN,'f',4));
     RovAntU		 ->setText(QString::number(mainForm->RovAntU,'f',4));
@@ -519,9 +531,6 @@ void OptDialog::GetOpt(void)
     SetPos(RovPosType->currentIndex(),editu,mainForm->RovPos);
     SetPos(RefPosType->currentIndex(),editr,mainForm->RefPos);
 	ReadAntList();
-	
-    RovAnt		 ->setCurrentText(mainForm->RovAnt);
-    RefAnt		 ->setCurrentText(mainForm->RefAnt);
 
     RovList		 ->setPlainText(mainForm->RovList);
     BaseList	 ->setPlainText(mainForm->BaseList);
@@ -567,8 +576,7 @@ void OptDialog::SetOpt(void)
     mainForm->GloAmbRes	  	=GloAmbRes	->currentIndex();
     mainForm->BdsAmbRes	  	=BdsAmbRes	->currentIndex();
     mainForm->ValidThresAR	=ValidThresAR->text().toDouble();
-    mainForm->ThresAR2		=ThresAR2->text().toDouble();
-    mainForm->ThresAR3		=ThresAR3->text().toDouble();
+    mainForm->GloHwBias	        =GloHwBias->text().toDouble();
     mainForm->OutCntResetAmb=OutCntResetAmb->text().toInt();
     mainForm->FixCntHoldAmb =FixCntHoldAmb->text().toInt();
     mainForm->OutCntResetAmb=OutCntResetAmb->text().toInt();
@@ -578,9 +586,17 @@ void OptDialog::SetOpt(void)
     mainForm->MaxAgeDiff  	=MaxAgeDiff ->text().toDouble();
     mainForm->RejectGdop 	=RejectGdop ->text().toDouble();
     mainForm->RejectThres 	=RejectThres->text().toDouble();
+    mainForm->VarHoldAmb 	=VarHoldAmb->text().toDouble();
+    mainForm->GainHoldAmb 	=GainHoldAmb->text().toDouble();
     mainForm->SlipThres   	=SlipThres  ->text().toDouble();
     mainForm->ARIter	  	=ARIter		  ->text().toInt();
     mainForm->NumIter	  	=NumIter	  ->text().toInt();
+    mainForm->MinFixSats	=MinFixSats ->text().toInt();
+    mainForm->MinHoldSats	=MinHoldSats->text().toInt();
+    mainForm->MinDropSats	=MinDropSats->text().toInt();
+    mainForm->ARFilter          =ARFilter   ->currentIndex();
+    mainForm->RcvStds           =RcvStds    ->currentIndex();
+    mainForm->MaxPosVarAR	=MaxPosVarAR->text().toDouble();
     mainForm->BaseLine[0]  	=BaselineLen->text().toDouble();
     mainForm->BaseLine[1]  	=BaselineSig->text().toDouble();
     mainForm->BaseLineConst	=BaselineConst->isChecked();
@@ -592,6 +608,8 @@ void OptDialog::SetOpt(void)
     mainForm->FieldSep	  	=FieldSep   ->text();
     mainForm->OutputHead  	=OutputHead ->currentIndex();
     mainForm->OutputOpt   	=OutputOpt  ->currentIndex();
+    mainForm->OutputSingle 	=OutputSingle->currentIndex();
+    mainForm->MaxSolStd 	=MaxSolStd->text().toDouble();
     mainForm->OutputDatum 	=OutputDatum->currentIndex();
     mainForm->OutputHeight	=OutputHeight->currentIndex();
     mainForm->OutputGeoid 	=OutputGeoid->currentIndex();
@@ -647,7 +665,7 @@ void OptDialog::SetOpt(void)
 	
     mainForm->ExtErr	  =ExtErr;
 	
-	UpdateEnable();
+    UpdateEnable();
 }
 //---------------------------------------------------------------------------
 void OptDialog::LoadOpt(const QString &file)
@@ -663,15 +681,15 @@ void OptDialog::LoadOpt(const QString &file)
 	
     memset(&filopt,0,sizeof(filopt_t));
 
-	resetsysopts();
+    resetsysopts();
     if (!loadopts(qPrintable(file),sysopts)) return;
 	getsysopts(&prcopt,&solopt,&filopt);
 	
-    PosMode		 ->setCurrentIndex(prcopt.mode);
-    Freq		 ->setCurrentIndex(prcopt.nf>NFREQ-1?NFREQ-1:prcopt.nf-1);
+    PosMode      ->setCurrentIndex(prcopt.mode);
+    Freq         ->setCurrentIndex(prcopt.nf>NFREQ-1?NFREQ-1:prcopt.nf-1);
     Solution	 ->setCurrentIndex(prcopt.soltype);
-    ElMask		 ->setCurrentText(QString::number(prcopt.elmin*R2D,'f',0));
-	SnrMask						=prcopt.snrmask;
+    ElMask       ->setCurrentText(QString::number(prcopt.elmin*R2D,'f',0));
+    SnrMask      =prcopt.snrmask;
     DynamicModel ->setCurrentIndex(prcopt.dynamics);
     TideCorr	 ->setCurrentIndex(prcopt.tidecorr);
     IonoOpt		 ->setCurrentIndex(prcopt.ionoopt);
@@ -702,8 +720,8 @@ void OptDialog::LoadOpt(const QString &file)
     GloAmbRes	 ->setCurrentIndex(prcopt.glomodear);
     BdsAmbRes	 ->setCurrentIndex(prcopt.bdsmodear);
     ValidThresAR ->setText(QString::number(prcopt.thresar[0],'g',3));
-    ThresAR2	 ->setText(QString::number(prcopt.thresar[1],'g',9));
-    ThresAR3	 ->setText(QString::number(prcopt.thresar[2],'g',3));
+    MaxPosVarAR  ->setText(QString::number(prcopt.thresar[1],'f',3));
+    GloHwBias    ->setText(QString::number(prcopt.thresar[2],'f',3));
     OutCntResetAmb->setText(QString::number(prcopt.maxout));
     FixCntHoldAmb->setText(QString::number(prcopt.minfix));
     LockCntFixAmb  ->setText(QString::number(prcopt.minlock));
@@ -712,9 +730,17 @@ void OptDialog::LoadOpt(const QString &file)
     MaxAgeDiff	 ->setText(QString::number(prcopt.maxtdiff,'f',1));
     RejectGdop   ->setText(QString::number(prcopt.maxgdop,'f',1));
     RejectThres  ->setText(QString::number(prcopt.maxinno,'f',1));
+    VarHoldAmb  ->setText(QString::number(prcopt.varholdamb,'f',4));
+    GainHoldAmb ->setText(QString::number(prcopt.gainholdamb,'f',4));
     SlipThres	 ->setText(QString::number(prcopt.thresslip,'f',3));
     ARIter		 ->setText(QString::number(prcopt.armaxiter));
+    MinFixSats  ->setText(QString::number(prcopt.minfixsats));
+    MinHoldSats ->setText(QString::number(prcopt.minholdsats));
+    MinDropSats ->setText(QString::number(prcopt.mindropsats));
     NumIter		 ->setText(QString::number(prcopt.niter));
+    SyncSol		 ->setCurrentIndex(prcopt.syncsol);
+    ARFilter	 ->setCurrentIndex(prcopt.arfilter);
+    RcvStds	 ->setCurrentIndex(prcopt.rcvstds);
     BaselineLen	 ->setText(QString::number(prcopt.baseline[0],'f',3));
     BaselineSig	 ->setText(QString::number(prcopt.baseline[1],'f',3));
     BaselineConst->setChecked(prcopt.baseline[0]>0.0);
@@ -726,6 +752,8 @@ void OptDialog::LoadOpt(const QString &file)
     FieldSep	 ->setText(solopt.sep);
     OutputHead	 ->setCurrentIndex(solopt.outhead);
     OutputOpt	 ->setCurrentIndex(solopt.outopt);
+    OutputSingle ->setCurrentIndex(prcopt.outsingle);
+    MaxSolStd    ->setText(QString::number(solopt.maxsolstd, 'f',2));
     OutputDatum  ->setCurrentIndex(solopt.datum);
     OutputHeight ->setCurrentIndex(solopt.height);
     OutputGeoid  ->setCurrentIndex(solopt.geoid);
@@ -846,8 +874,8 @@ void OptDialog::SaveOpt(const QString &file)
     prcopt.glomodear=GloAmbRes	->currentIndex();
     prcopt.bdsmodear=BdsAmbRes	->currentIndex();
     prcopt.thresar[0]=ValidThresAR->text().toDouble();
-    prcopt.thresar[1]=ThresAR2->text().toDouble();
-    prcopt.thresar[2]=ThresAR3->text().toDouble();
+    prcopt.thresar[1]=MaxPosVarAR->text().toDouble();
+    prcopt.thresar[2]=GloHwBias->text().toDouble();
     prcopt.maxout	=OutCntResetAmb->text().toDouble();
     prcopt.minfix	=FixCntHoldAmb->text().toDouble();
     prcopt.minlock	=LockCntFixAmb->text().toDouble();
@@ -856,9 +884,17 @@ void OptDialog::SaveOpt(const QString &file)
     prcopt.maxtdiff	=MaxAgeDiff	->text().toDouble();
     prcopt.maxgdop	=RejectGdop ->text().toDouble();
     prcopt.maxinno	=RejectThres->text().toDouble();
+    prcopt.varholdamb=VarHoldAmb->text().toDouble();
+    prcopt.gainholdamb=GainHoldAmb->text().toDouble();
     prcopt.thresslip=SlipThres	->text().toDouble();
     prcopt.armaxiter=ARIter		->text().toDouble();
+    prcopt.minfixsats=MinFixSats->text().toDouble();
+    prcopt.minholdsats=MinHoldSats->text().toDouble();
+    prcopt.mindropsats=MinDropSats->text().toDouble();
     prcopt.niter	=NumIter	->text().toDouble();
+    prcopt.syncsol	=SyncSol->currentIndex();
+    prcopt.arfilter =ARFilter->currentIndex();
+    prcopt.rcvstds  =RcvStds->currentIndex();
     if (prcopt.mode==PMODE_MOVEB&&BaselineConst->isChecked()) {
         prcopt.baseline[0]=BaselineLen->text().toDouble();
         prcopt.baseline[1]=BaselineSig->text().toDouble();
@@ -871,6 +907,8 @@ void OptDialog::SaveOpt(const QString &file)
     strcpy(solopt.sep,qPrintable(FieldSep_Text));
     solopt.outhead	=OutputHead	 ->currentIndex();
     solopt.outopt	=OutputOpt	 ->currentIndex();
+    prcopt.outsingle=OutputSingle->currentIndex();
+    solopt.maxsolstd=MaxSolStd->text().toDouble();
     solopt.datum	=OutputDatum ->currentIndex();
     solopt.height	=OutputHeight->currentIndex();
     solopt.geoid	=OutputGeoid ->currentIndex();
@@ -937,7 +975,8 @@ void OptDialog::UpdateEnable(void)
 	
     Freq           ->setEnabled(rel||ppp);
     Solution       ->setEnabled(rel||ppp);
-    DynamicModel   ->setEnabled(rel);
+    DynamicModel   ->setEnabled(PosMode->currentIndex()==PMODE_KINEMA||
+	                        PosMode->currentIndex()==PMODE_PPP_KINEMA);
     TideCorr       ->setEnabled(rel||ppp);
     //IonoOpt        ->setEnabled(!ppp);
     PosOpt1        ->setEnabled(ppp);
@@ -950,8 +989,7 @@ void OptDialog::UpdateEnable(void)
     GloAmbRes      ->setEnabled(ar&&AmbRes->currentIndex()>0&&NavSys2->isChecked());
     BdsAmbRes      ->setEnabled(ar&&AmbRes->currentIndex()>0&&NavSys6->isChecked());
     ValidThresAR   ->setEnabled(ar&&AmbRes->currentIndex()>=1&&AmbRes->currentIndex()<4);
-    ThresAR2	   ->setEnabled(ar&&AmbRes->currentIndex()>=4);
-    ThresAR3	   ->setEnabled(ar&&AmbRes->currentIndex()>=4);
+    GloHwBias	   ->setEnabled(ar&&AmbRes->currentIndex()==2);
     LockCntFixAmb  ->setEnabled(ar&&AmbRes->currentIndex()>=1);
     ElMaskAR       ->setEnabled(ar&&AmbRes->currentIndex()>=1);
     OutCntResetAmb ->setEnabled(ar||ppp);
@@ -960,8 +998,17 @@ void OptDialog::UpdateEnable(void)
     SlipThres      ->setEnabled(rtk||ppp);
     MaxAgeDiff     ->setEnabled(rel);
     RejectThres    ->setEnabled(rel||ppp);
+    VarHoldAmb     ->setEnabled(ar);
+    GainHoldAmb    ->setEnabled(ar&&AmbRes->currentIndex()==3);
     ARIter         ->setEnabled(ppp);
     NumIter        ->setEnabled(rel||ppp);
+    MinFixSats     ->setEnabled(ar);
+    MinHoldSats    ->setEnabled(ar);
+    MinDropSats    ->setEnabled(rel);
+    MaxPosVarAR    ->setEnabled(ar&&!ppp);
+    SyncSol        ->setEnabled(rel||ppp);
+    ARFilter	   ->setEnabled(ar);
+    RcvStds	   ->setEnabled(rel);
     BaselineConst  ->setEnabled(PosMode->currentIndex()==PMODE_MOVEB);
     BaselineLen    ->setEnabled(BaselineConst->isChecked()&&PosMode->currentIndex()==PMODE_MOVEB);
     BaselineSig    ->setEnabled(BaselineConst->isChecked()&&PosMode->currentIndex()==PMODE_MOVEB);

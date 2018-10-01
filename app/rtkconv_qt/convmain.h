@@ -26,12 +26,12 @@ class ConversionThread : public QThread
 {
     Q_OBJECT
 public:
-    char ifile[1024],*ofile[7];
+    char ifile[1024],*ofile[9];
     rnxopt_t rnxopt;
     int format;
 
     explicit ConversionThread(QObject *parent):QThread(parent){
-        for (int i=0;i<7;i++)
+        for (int i=0;i<9;i++)
         {
             ofile[i]=new char[1024];
             ofile[i][0]='\0';
@@ -76,10 +76,16 @@ public slots:
     void BtnOutFile2Click    ();
     void BtnOutFile3Click    ();
     void BtnOutFile4Click    ();
+    void BtnOutFile7Click    ();
+    void BtnOutFile8Click    ();
+    void BtnOutFile9Click    ();
     void BtnOutFileView1Click();
     void BtnOutFileView2Click();
     void BtnOutFileView3Click();
     void BtnOutFileView4Click();
+    void BtnOutFileView7Click();
+    void BtnOutFileView8Click();
+    void BtnOutFileView9Click();
     void BtnAbortClick       ();
 	
     void TimeStartFClick     ();
@@ -97,8 +103,6 @@ public slots:
     void BtnOutDirClick();
     void BtnKeyClick();
     void BtnPostClick();
-    void BtnOutFile7Click();
-    void BtnOutFileView7Click();
     void BtnInFileViewClick();
     void ConversionFinished();
     void UpdateEnable();

@@ -134,16 +134,18 @@ int main(int argc, char **argv)
         else if (!strcmp(argv[i],"-p")&&i+1<argc) prcopt.mode=atoi(argv[++i]);
         else if (!strcmp(argv[i],"-f")&&i+1<argc) prcopt.nf=atoi(argv[++i]);
         else if (!strcmp(argv[i],"-sys")&&i+1<argc) {
+	    prcopt.navsys = 0;
             for (p=argv[++i];*p;p++) {
-                switch (*p) {
-                    case 'G': prcopt.navsys|=SYS_GPS;
-                    case 'R': prcopt.navsys|=SYS_GLO;
-                    case 'E': prcopt.navsys|=SYS_GAL;
-                    case 'J': prcopt.navsys|=SYS_QZS;
-                    case 'C': prcopt.navsys|=SYS_CMP;
-                    case 'I': prcopt.navsys|=SYS_IRN;
-                }
-                if (!(p=strchr(p,','))) break;
+               switch (*p) {
+                    case 'G': prcopt.navsys|=SYS_GPS;break;
+                    case 'R': prcopt.navsys|=SYS_GLO;break;
+                    case 'E': prcopt.navsys|=SYS_GAL;break;
+                    case 'J': prcopt.navsys|=SYS_QZS;break;
+                    case 'C': prcopt.navsys|=SYS_CMP;break;
+                    case 'I': prcopt.navsys|=SYS_IRN;break;
+                    case 'S': prcopt.navsys|=SYS_SBS;break;
+               }
+              if (!(p=strchr(p,','))) break;
             }
         }
         else if (!strcmp(argv[i],"-m")&&i+1<argc) prcopt.elmin=atof(argv[++i])*D2R;
