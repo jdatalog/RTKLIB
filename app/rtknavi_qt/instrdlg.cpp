@@ -7,6 +7,7 @@
 #include <QFileSystemModel>
 #include <QCompleter>
 
+
 #include "rtklib.h"
 #include "refdlg.h"
 #include "navimain.h"
@@ -18,6 +19,8 @@
 #include "rcvoptdlg.h"
 
 #include "instrdlg.h"
+
+#include <QFileInfo>
 
 //---------------------------------------------------------------------------
 InputStrDialog::InputStrDialog(QWidget* parent)
@@ -103,6 +106,11 @@ void InputStrDialog::showEvent(QShowEvent *event)
     TimeTagC  ->setChecked(TimeTag);
     TimeSpeedL->setCurrentIndex(TimeSpeedL->findText(TimeSpeed));
     TimeStartE->setText(TimeStart);
+    if (Time64Bit) {
+      Time64BitL   ->setCurrentIndex(1);
+    } else {
+      Time64BitL   ->setCurrentIndex(0);
+    }
     NmeaPos1  ->setText(QString::number(NmeaPos[0],'f',9));
     NmeaPos2  ->setText(QString::number(NmeaPos[1],'f',9));
 
@@ -122,14 +130,15 @@ void InputStrDialog::BtnOkClick()
     Format[0]  =Format1   ->currentIndex();
     Format[1]  =Format2->currentIndex()<NRcv?Format2->currentIndex():STRFMT_SP3+Format2->currentIndex()-NRcv;
     Format[2]  =Format3->currentIndex()<NRcv?Format3->currentIndex():STRFMT_SP3+Format3->currentIndex()-NRcv;
+    NmeaReq    =NmeaReqL  ->currentIndex();
+    TimeTag    =TimeTagC  ->isEnabled()&&TimeTagC  ->isChecked();
+    TimeSpeed  =TimeSpeedL->currentText();
+    TimeStart  =TimeStartE->text();
+    Time64Bit  =Time64BitL->currentIndex();
     Paths[0][2]=SetFilePath(FilePath1->text());
     Paths[1][2]=SetFilePath(FilePath2->text());
     Paths[2][2]=SetFilePath(FilePath3->text());
-    NmeaReq    =NmeaReqL  ->currentIndex();
-    TimeTag    =TimeTagC  ->isChecked();
-    TimeSpeed  =TimeSpeedL->currentText();
-    TimeStart  =TimeStartE->text();
-    NmeaPos[0] =NmeaPos1->text().toDouble(&ok);
+   NmeaPos[0] =NmeaPos1->text().toDouble(&ok);
     NmeaPos[1] =NmeaPos2->text().toDouble(&ok);
 
     accept();
@@ -168,6 +177,7 @@ void  InputStrDialog::TimeTagCClick()
 {
 	UpdateEnable();
 }
+
 //---------------------------------------------------------------------------
 void  InputStrDialog::NmeaReqLChange(int)
 {
@@ -188,6 +198,7 @@ QString  InputStrDialog::SetFilePath(const QString &p)
     if (TimeTagC->isChecked()     ) path+="::T";
     if (TimeStartE->text()!="0" ) path+="::+"+TimeStartE->text();
     path+="::"+TimeSpeedL->currentText();
+    if (Time64Bit) { path+="::P=8"; } else { path+="::P=4"; };
 	return path;
 }
 //---------------------------------------------------------------------------
@@ -380,16 +391,19 @@ void  InputStrDialog::SerialOpt(int index, int opt)
 void  InputStrDialog::BtnFile1Click()
 {
     FilePath1->setText(QDir::toNativeSeparators(QFileDialog::getOpenFileName(this,tr("Open..."),FilePath1->text())));
+    UpdateEnable();
 }
 //---------------------------------------------------------------------------
 void  InputStrDialog::BtnFile2Click()
 {
     FilePath2->setText(QDir::toNativeSeparators(QFileDialog::getOpenFileName(this,tr("Open..."),FilePath2->text())));
+    UpdateEnable();
 }
 //---------------------------------------------------------------------------
 void  InputStrDialog::BtnFile3Click()
 {
     FilePath3->setText(QDir::toNativeSeparators(QFileDialog::getOpenFileName(this,tr("Open..."),FilePath3->text())));
+    UpdateEnable();
 }
 //---------------------------------------------------------------------------
 void  InputStrDialog::TcpOpt(int index, int opt)
@@ -424,9 +438,19 @@ void  InputStrDialog::FtpOpt(int index, int opt)
 //---------------------------------------------------------------------------
 void  InputStrDialog::UpdateEnable(void)
 {
+ //   QFileInfo check_file(FilePath1->text()+".tag");
+    QFileInfo check_file;
     int ena1=(StreamC1->isChecked()&&(Stream1->currentIndex()==4))||
              (StreamC2->isChecked()&&(Stream2->currentIndex()==4))||
              (StreamC3->isChecked()&&(Stream3->currentIndex()==4));
+    int enaTC1=(StreamC1->isChecked()&&(Stream1->currentIndex()==4)&&QFileInfo(FilePath1->text()+".tag").exists());
+    int enaTC2=((StreamC2->isChecked()&&(Stream2->currentIndex()==4)&&QFileInfo(FilePath2->text()+".tag").exists())||((!StreamC2->isChecked()) && (!StreamC3->isChecked())));
+    int enaTC3=((StreamC3->isChecked()&&(Stream3->currentIndex()==4)&&QFileInfo(FilePath3->text()+".tag").exists())||(!StreamC3->isChecked()));
+
+
+    int enaTC=(StreamC1->isChecked()&&(Stream1->currentIndex()==4)&&QFileInfo(FilePath1->text()+".tag").exists())&&
+              ((StreamC2->isChecked()&&(Stream2->currentIndex()==4)&&QFileInfo(FilePath2->text()+".tag").exists())||((!StreamC2->isChecked()) && (!StreamC3->isChecked())))&&
+              ((StreamC3->isChecked()&&(Stream3->currentIndex()==4)&&QFileInfo(FilePath3->text()+".tag").exists())||(!StreamC3->isChecked()));
     int ena2=StreamC2->isChecked()&&(Stream2->currentIndex()<=3);
 	
     Stream1   ->setEnabled(StreamC1->isChecked());
@@ -458,9 +482,10 @@ void  InputStrDialog::UpdateEnable(void)
     BtnFile1  ->setEnabled(StreamC1->isChecked()&&Stream1->currentIndex()==4);
     BtnFile2  ->setEnabled(StreamC2->isChecked()&&Stream2->currentIndex()==4);
     BtnFile3  ->setEnabled(StreamC3->isChecked()&&Stream3->currentIndex()==4);
-    TimeTagC  ->setEnabled(ena1);
-    TimeStartE->setEnabled(ena1&&TimeTagC->isChecked());
-    TimeSpeedL->setEnabled(ena1&&TimeTagC->isChecked());
+    TimeTagC  ->setEnabled(enaTC);
+    TimeStartE->setEnabled(enaTC&&TimeTagC->isChecked());
+    TimeSpeedL->setEnabled(enaTC&&TimeTagC->isChecked());
+    Time64BitL->setEnabled(enaTC&&TimeTagC->isChecked());
     LabelF2   ->setEnabled(ena1&&TimeTagC->isChecked());
     LabelF3   ->setEnabled(ena1&&TimeTagC->isChecked());
 }

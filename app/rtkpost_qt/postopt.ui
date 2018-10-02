@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>643</width>
-    <height>587</height>
+    <width>672</width>
+    <height>732</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -177,7 +177,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="TabSheet1">
       <property name="toolTip">
@@ -213,6 +213,11 @@
          <item>
           <property name="text">
            <string>Static</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Static-start</string>
           </property>
          </item>
          <item>
@@ -916,6 +921,72 @@
        <string>Setting&amp;2</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="1" colspan="2">
+        <widget class="QLineEdit" name="LockCntFixAmb">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>5</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3" colspan="2">
+        <widget class="QLineEdit" name="ElMaskAR">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="LabelHold">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Min Fix / Elevation (°) to Hold Amb</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="Label13">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Min Lock / Elevation (°) to Fix Amb</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Min Drop Sats  / Use Rcv StdDevs</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Min Fix Sats / Min Hold Sats</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="Label25">
          <property name="enabled">
@@ -987,6 +1058,11 @@
            <string>Auto Calibration</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>Fix and Hold</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="0" column="4">
@@ -1009,203 +1085,8 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="LabelRatio">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Min Ratio to Fix Ambiguity</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="4">
-        <widget class="QLineEdit" name="ValidThresAR">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>3.0</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="LabelConf">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Min Confidence / Max FCB to Fix Amb</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="QLineEdit" name="ThresAR2">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>0.99995</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3" colspan="2">
-        <widget class="QLineEdit" name="ThresAR3">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>0.20</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="Label13">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Min Lock / Elevation (°) to Fix Amb</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QLineEdit" name="LockCntFixAmb">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>5</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3" colspan="2">
-        <widget class="QLineEdit" name="ElMaskAR">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>0</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="LabelHold">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Min Fix / Elevation (°) to Hold Amb</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="2">
-        <widget class="QLineEdit" name="FixCntHoldAmb">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>10</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3" colspan="2">
-        <widget class="QLineEdit" name="ElMaskHold">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>0</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="Label22">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Outage to Reset Amb/Slip Thres (m)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1" colspan="2">
-        <widget class="QLineEdit" name="OutCntResetAmb">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>5</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3" colspan="2">
-        <widget class="QLineEdit" name="SlipThres">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>0.05</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="Label14">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Max Age of Diff (s) / Sync Solution</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1" colspan="2">
-        <widget class="QLineEdit" name="MaxAgeDiff">
+       <item row="6" column="3" colspan="2">
+        <widget class="QLineEdit" name="RejectThres">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -1217,7 +1098,46 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="3" colspan="2">
+       <item row="7" column="0">
+        <widget class="QLabel" name="Label37">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Max # of AR Iter/# of Filter Iter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1" colspan="2">
+        <widget class="QLineEdit" name="ARIter">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3" colspan="2">
+        <widget class="QLineEdit" name="NumIter">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3" colspan="2">
         <widget class="QComboBox" name="SyncSol">
          <property name="enabled">
           <bool>false</bool>
@@ -1242,7 +1162,7 @@
          </item>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="Label11">
          <property name="enabled">
           <bool>true</bool>
@@ -1255,7 +1175,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="1" colspan="2">
+       <item row="6" column="1" colspan="2">
         <widget class="QLineEdit" name="RejectGdop">
          <property name="enabled">
           <bool>true</bool>
@@ -1268,8 +1188,8 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="3" colspan="2">
-        <widget class="QLineEdit" name="RejectThres">
+       <item row="1" column="0">
+        <widget class="QLabel" name="LabelRatio">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -1277,50 +1197,11 @@
           <string/>
          </property>
          <property name="text">
-          <string>30</string>
+          <string>Min Ratio to Fix Ambiguity / GLO HW Bias</string>
          </property>
         </widget>
        </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="Label37">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Max # of AR Iter/# of Filter Iter</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1" colspan="2">
-        <widget class="QLineEdit" name="ARIter">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="3" colspan="2">
-        <widget class="QLineEdit" name="NumIter">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
         <widget class="QCheckBox" name="BaselineConst">
          <property name="toolTip">
           <string/>
@@ -1333,7 +1214,7 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="1" colspan="2">
+       <item row="8" column="1" colspan="2">
         <widget class="QLineEdit" name="BaselineLen">
          <property name="enabled">
           <bool>true</bool>
@@ -1346,7 +1227,7 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="3" colspan="2">
+       <item row="8" column="3" colspan="2">
         <widget class="QLineEdit" name="BaselineSig">
          <property name="enabled">
           <bool>true</bool>
@@ -1356,6 +1237,207 @@
          </property>
          <property name="text">
           <string>0.001</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="QLineEdit" name="FixCntHoldAmb">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>10</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3" colspan="2">
+        <widget class="QLineEdit" name="ElMaskHold">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="Label22">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Outage to Reset Amb/Slip Thres (m)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="2">
+        <widget class="QLineEdit" name="OutCntResetAmb">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>5</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3" colspan="2">
+        <widget class="QLineEdit" name="SlipThres">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>0.05</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="Label14">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Max Age of Diff (s) / Sync Solution</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" colspan="2">
+        <widget class="QLineEdit" name="MaxAgeDiff">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>30</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Max Pos Var for AR  / AR Filter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Hold Amb Var / Hold Amb Gain</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1" colspan="2">
+        <widget class="QLineEdit" name="MinFixSats">
+         <property name="text">
+          <string>3</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="3" colspan="2">
+        <widget class="QLineEdit" name="MinHoldSats">
+         <property name="text">
+          <string>5</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="1" colspan="2">
+        <widget class="QLineEdit" name="MinDropSats">
+         <property name="text">
+          <string>20</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="1" colspan="2">
+        <widget class="QLineEdit" name="MaxPosVarAR">
+         <property name="text">
+          <string>0.1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="1" colspan="2">
+        <widget class="QLineEdit" name="GainHoldAmb">
+         <property name="text">
+          <string>0.01</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="3" colspan="2">
+        <widget class="QComboBox" name="RcvStds">
+         <property name="currentText">
+          <string>ON</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>ON</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>OFF</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="17" column="3" colspan="2">
+        <widget class="QComboBox" name="ARFilter">
+         <property name="currentText">
+          <string>ON</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>ON</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>OFF</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="20" column="3" colspan="2">
+        <widget class="QLineEdit" name="VarHoldAmb">
+         <property name="text">
+          <string>0.001</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QLineEdit" name="ValidThresAR">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>3.0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3" colspan="2">
+        <widget class="QLineEdit" name="GloHwBias">
+         <property name="text">
+          <string>0.0</string>
          </property>
         </widget>
        </item>
@@ -1369,8 +1451,72 @@
        <string>O&amp;utput</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <widget class="QLabel" name="LabelSolFormat">
+       <item row="10" column="0">
+        <widget class="QLabel" name="Label21">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>NMEA Interval (s) RMC/GGA, GSA/GSV</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QLineEdit" name="NmeaIntv1">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="QComboBox" name="DebugStatus">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>OFF</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>State</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Residuals</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="10" column="3" colspan="2">
+        <widget class="QLineEdit" name="NmeaIntv2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="LabelFieldSep">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -1378,38 +1524,8 @@
           <string/>
          </property>
          <property name="text">
-          <string>Solution Format</string>
+          <string>Outpt Single if Sol Outage / Max Sol Std (m)</string>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="3">
-        <widget class="QComboBox" name="SolFormat">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <item>
-          <property name="text">
-           <string>Lat/Lon/Height</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>X/Y/Z-ECEF</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>E/N/U-Baseline</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>NMEA0183</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item row="1" column="0">
@@ -1425,7 +1541,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="1" column="2">
         <widget class="QComboBox" name="OutputHead">
          <property name="enabled">
           <bool>true</bool>
@@ -1445,7 +1561,7 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="2" colspan="2">
+       <item row="1" column="3" colspan="2">
         <widget class="QComboBox" name="OutputOpt">
          <property name="enabled">
           <bool>true</bool>
@@ -1465,20 +1581,7 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="LabelTimeFormat">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Time Format / # of Decimals</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="2">
+       <item row="2" column="2" colspan="2">
         <widget class="QComboBox" name="TimeFormat">
          <property name="enabled">
           <bool>true</bool>
@@ -1508,8 +1611,8 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="3">
-        <widget class="QLineEdit" name="TimeDecimal">
+       <item row="2" column="0">
+        <widget class="QLabel" name="LabelTimeFormat">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -1517,83 +1620,11 @@
           <string/>
          </property>
          <property name="text">
-          <string>3</string>
+          <string>Time Format / # of Decimals</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="LabelLatLonFormat">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Latitude / Longitude Format</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="3">
-        <widget class="QComboBox" name="LatLonFormat">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <item>
-          <property name="text">
-           <string>ddd.ddddddd</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>ddd mm ss.sss</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="LabelFieldSep">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Field Separator</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="3">
-        <widget class="QLineEdit" name="FieldSep">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="Label2">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Datum/Height</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
+       <item row="7" column="2">
         <widget class="QComboBox" name="OutputDatum">
          <property name="enabled">
           <bool>true</bool>
@@ -1608,7 +1639,20 @@
          </item>
         </widget>
        </item>
-       <item row="5" column="2" colspan="2">
+       <item row="7" column="0">
+        <widget class="QLabel" name="Label2">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Datum/Height</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3" colspan="2">
         <widget class="QComboBox" name="OutputHeight">
          <property name="enabled">
           <bool>true</bool>
@@ -1628,165 +1672,7 @@
          </item>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="Label18">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Geoid Model</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1" colspan="3">
-        <widget class="QComboBox" name="OutputGeoid">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <item>
-          <property name="text">
-           <string>Internal</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>EGM96-BE 15&quot;</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>EGM2008-SE 2.5&quot;</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>EGM2008-SE 1.0&quot;</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>GSI2000 1x1.5&quot;</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="Label31">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Solution for Static Mode</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1" colspan="3">
-        <widget class="QComboBox" name="SolStatic">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <item>
-          <property name="text">
-           <string>All</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Single</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="Label21">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>NMEA Interval (s) RMC/GGA, GSA/GSV</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="QLineEdit" name="NmeaIntv1">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>0</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2" colspan="2">
-        <widget class="QLineEdit" name="NmeaIntv2">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>0</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="Label36">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Output Solution Status / Debug Trace</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="QComboBox" name="DebugStatus">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <item>
-          <property name="text">
-           <string>OFF</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>State</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Residuals</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="9" column="2" colspan="2">
+       <item row="11" column="3" colspan="2">
         <widget class="QComboBox" name="DebugTrace">
          <property name="enabled">
           <bool>true</bool>
@@ -1822,6 +1708,227 @@
          <item>
           <property name="text">
            <string>Level5</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="Label36">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Output Solution Status / Debug Trace</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelSolFormat">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Solution Format</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="3">
+        <widget class="QComboBox" name="SolFormat">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Lat/Lon/Height</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>X/Y/Z-ECEF</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>E/N/U-Baseline</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>NMEA0183</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="8" column="2" colspan="3">
+        <widget class="QComboBox" name="OutputGeoid">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Internal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>EGM96-BE 15&quot;</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>EGM2008-SE 2.5&quot;</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>EGM2008-SE 1.0&quot;</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>GSI2000 1x1.5&quot;</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>RAF09_M15x20</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="Label18">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Geoid Model</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2" colspan="3">
+        <widget class="QComboBox" name="SolStatic">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>All</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Single</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="Label31">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Solution for Static Mode</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="QLineEdit" name="TimeDecimal">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>3</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="LabelLatLonFormat">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Latitude Longitude Format / Field Separator</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="QLineEdit" name="FieldSep">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2" colspan="2">
+        <widget class="QComboBox" name="LatLonFormat">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>ddd.ddddddd</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ddd mm ss.sss</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="4" column="4">
+        <widget class="QLineEdit" name="MaxSolStd"/>
+       </item>
+       <item row="4" column="2">
+        <widget class="QComboBox" name="OutputSingle">
+         <property name="currentText">
+          <string>ON</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>ON</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>OFF</string>
           </property>
          </item>
         </widget>
@@ -2155,7 +2262,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
+          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2672,7 +2779,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
+          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2692,7 +2799,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
+          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2812,7 +2919,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
+          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2874,7 +2981,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
+          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2936,7 +3043,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
+          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -3408,7 +3515,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../rtkconv_qt/rtkconv_qt.qrc"/>
+  <include location="../rtkget_qt/rtkget_qt.qrc"/>
  </resources>
  <connections/>
 </ui>
