@@ -819,7 +819,6 @@ static int readfile(file_t *file, unsigned char *buff, int nmax, char *msg)
         }
 	
         if (!file->repmode) tick_master = file->tick_n;
-        printf( "=> [T%d] tick:%u nmax:%d file path:%s\n", file->size_fpos, file->tick_n, nmax, file->path);
     }
     if (nmax>0) {
         nr=(int)fread(buff,1,nmax,file->fp);
