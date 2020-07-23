@@ -759,7 +759,7 @@ void OptDialog::LoadOpt(const QString &file)
 	
     PosMode		 ->setCurrentIndex(prcopt.mode);
     Freq		 ->setCurrentIndex(prcopt.nf>NFREQ-1?NFREQ-1:prcopt.nf-1);
-    Solution	 ->setCurrentIndex(prcopt.soltype);
+
     ElMask		 ->setCurrentIndex(ElMask->findText(QString::number(prcopt.elmin*R2D,'f',0)));
     DynamicModel ->setCurrentIndex(prcopt.dynamics);
     TideCorr	 ->setCurrentIndex(prcopt.tidecorr);
@@ -942,7 +942,7 @@ void OptDialog::SaveOpt(const QString &file)
 
     prcopt.mode		=PosMode	 ->currentIndex();
     prcopt.nf		=Freq		 ->currentIndex()+1;
-    prcopt.soltype	=Solution	 ->currentIndex();
+    prcopt.soltype	=0; /* forward */
     prcopt.elmin	=ElMask	->currentText().toDouble()*D2R;
     prcopt.dynamics	=DynamicModel->currentIndex();
     prcopt.tidecorr	=TideCorr	 ->currentIndex();
@@ -1073,7 +1073,7 @@ void OptDialog::UpdateEnable(void)
     bool ar=rtk||ppp;
 	
     Freq           ->setEnabled(rel);
-    Solution       ->setEnabled(false);
+
     DynamicModel   ->setEnabled(rel);
     TideCorr       ->setEnabled(rel||ppp);
     PosOpt1        ->setEnabled(ppp);

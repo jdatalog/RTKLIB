@@ -205,6 +205,7 @@ void  MainWindow::showEvent(QShowEvent *event)
     connect(BtnExit,SIGNAL(clicked()),this,SLOT(BtnExitClick()));
     connect(BtnStart,SIGNAL(clicked()),this,SLOT(BtnStartClick()));
     connect(BtnStop,SIGNAL(clicked()),this,SLOT(BtnStopClick()));
+    connect(BtnPlot,SIGNAL(clicked()),this,SLOT(BtnPlotClick()));
     connect(BtnAbout,SIGNAL(clicked(bool)),this,SLOT(BtnAboutClick()));
     connect(BtnFreqType1,SIGNAL(clicked(bool)),this,SLOT(BtnFreqType1Click()));
     connect(BtnFreqType2,SIGNAL(clicked(bool)),this,SLOT(BtnFreqType2Click()));
@@ -2374,10 +2375,20 @@ void  MainWindow::LoadOpt(void)
     PanelStack      =settings.value("setting/panelstack",      0).toInt();
     TrkType1        =settings.value("setting/trktype1",        0).toInt();
     TrkType2        =settings.value("setting/trktype2",        0).toInt();
+    TrkType3        =settings.value("setting/trktype3",        0).toInt();
+    TrkType4        =settings.value("setting/trktype4",        0).toInt();
     TrkScale1       =settings.value("setting/trkscale1",       5).toInt();
     TrkScale2       =settings.value("setting/trkscale2",       5).toInt();
+    TrkScale3       =settings.value("setting/trkscale3",       5).toInt();
+    TrkScale4       =settings.value("setting/trkscale4",       5).toInt();
+    FreqType1       =settings.value("setting/freqtype1", 0).toInt();
+    FreqType2       =settings.value("setting/freqtype2", 0).toInt();
+    FreqType3       =settings.value("setting/freqtype3", 0).toInt();
+    FreqType4       =settings.value("setting/freqtype4", 0).toInt();
     BLMode1         =settings.value("setting/blmode1",         0).toInt();
     BLMode2         =settings.value("setting/blmode2",         0).toInt();
+    BLMode3         =settings.value("setting/blmode3",         0).toInt();
+    BLMode4         =settings.value("setting/blmode4",         0).toInt();
     MarkerName      =settings.value("setting/markername",     "").toString();
     MarkerComment   =settings.value("setting/markercomment",  "").toString();
 
@@ -2574,10 +2585,16 @@ void  MainWindow::SaveOpt(void)
     settings.setValue("setting/panelstack", PanelStack         );
     settings.setValue("setting/trktype1",   TrkType1           );
     settings.setValue("setting/trktype2",   TrkType2           );
+    settings.setValue("setting/trktype3",   TrkType3           );
+    settings.setValue("setting/trktype4",   TrkType4           );
     settings.setValue("setting/trkscale1",  TrkScale1          );
     settings.setValue("setting/trkscale2",  TrkScale2          );
+    settings.setValue("setting/trkscale3",  TrkScale3          );
+    settings.setValue("setting/trkscale4",  TrkScale4          );
     settings.setValue("setting/blmode1",    BLMode1            );
     settings.setValue("setting/blmode2",    BLMode2            );
+    settings.setValue("setting/blmode3",    BLMode3            );
+    settings.setValue("setting/blmode4",    BLMode4            );
     settings.setValue("setting/markername", MarkerName         );
     settings.setValue("setting/markercomment",MarkerComment    );
 

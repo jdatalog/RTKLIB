@@ -40,13 +40,14 @@ static char snrmask_[NFREQ][1024];
 /* system options table ------------------------------------------------------*/
 #define SWTOPT  "0:off,1:on"
 #define MODOPT  "0:single,1:dgps,2:kinematic,3:static,4:static-start,5:movingbase,6:fixed,7:ppp-kine,8:ppp-static,9:ppp-fixed"
-#define FRQOPT  "1:l1,2:l1+l2,3:l1+l2+e5b,4:l1+l2+e5b+l5"
+#define FRQOPT  "1:l1,2:l1+l2,3:l1+l2+l5,4:l1+l2+l5+l6,2:l1+l2+e5b"
 #define TYPOPT  "0:forward,1:backward,2:combined"
 #define IONOPT  "0:off,1:brdc,2:sbas,3:dual-freq,4:est-stec,5:ionex-tec,6:qzs-brdc,7:qzs-lex,8:stec"
 #define TRPOPT  "0:off,1:saas,2:sbas,3:est-ztd,4:est-ztdgrad,5:ztd"
 #define EPHOPT  "0:brdc,1:precise,2:brdc+sbas,3:brdc+ssrapc,4:brdc+ssrcom"
 #define NAVOPT  "1:gps+2:sbas+4:glo+8:gal+16:qzs+32:comp"
 #define GAROPT  "0:off,1:on,2:autocal,3:fix-and-hold"
+#define WEIGHTOPT "0:elevation,1:snr"
 #define SOLOPT  "0:llh,1:xyz,2:enu,3:nmea"
 #define TSYOPT  "0:gpst,1:utc,2:jst"
 #define TFTOPT  "0:tow,1:hms"
@@ -87,7 +88,7 @@ EXPORT opt_t sysopts[]={
     {"pos2-armode",     3,  (void *)&prcopt_.modear,     ARMOPT },
     {"pos2-gloarmode",  3,  (void *)&prcopt_.glomodear,  GAROPT },
     {"pos2-bdsarmode",  3,  (void *)&prcopt_.bdsmodear,  SWTOPT },
-	{"pos2-arfilter",   3,  (void *)&prcopt_.arfilter,   SWTOPT },
+    {"pos2-arfilter",   3,  (void *)&prcopt_.arfilter,   SWTOPT },
     {"pos2-arthres",    1,  (void *)&prcopt_.thresar[0], ""     },
     {"pos2-arthres1",   1,  (void *)&prcopt_.thresar[1], ""     },
     {"pos2-arthres2",   1,  (void *)&prcopt_.thresar[2], ""     },
@@ -96,10 +97,10 @@ EXPORT opt_t sysopts[]={
     {"pos2-varholdamb", 1,  (void *)&prcopt_.varholdamb, "cyc^2"},
     {"pos2-gainholdamb",1,  (void *)&prcopt_.gainholdamb,""     },
     {"pos2-arlockcnt",  0,  (void *)&prcopt_.minlock,    ""     },
-	{"pos2-minfixsats", 0,  (void *)&prcopt_.minfixsats, ""     },
-	{"pos2-minholdsats",0,  (void *)&prcopt_.minholdsats,""     },
+    {"pos2-minfixsats", 0,  (void *)&prcopt_.minfixsats, ""     },
+    {"pos2-minholdsats",0,  (void *)&prcopt_.minholdsats,""     },
     {"pos2-mindropsats",0,  (void *)&prcopt_.mindropsats,""     },
-	{"pos2-rcvstds",    3,  (void *)&prcopt_.rcvstds,    SWTOPT },
+    {"pos2-rcvstds",    3,  (void *)&prcopt_.rcvstds,    SWTOPT },
     {"pos2-arelmask",   1,  (void *)&elmaskar_,          "deg"  },
     {"pos2-arminfix",   0,  (void *)&prcopt_.minfix,     ""     },
     {"pos2-armaxiter",  0,  (void *)&prcopt_.armaxiter,  ""     },
@@ -132,12 +133,15 @@ EXPORT opt_t sysopts[]={
     {"out-nmeaintv2",   1,  (void *)&solopt_.nmeaintv[1],"s"    },
     {"out-outstat",     3,  (void *)&solopt_.sstat,      STSOPT },
     
+    {"stats-weightmode",3,  (void *)&prcopt_.weightmode, WEIGHTOPT},
     {"stats-eratio1",   1,  (void *)&prcopt_.eratio[0],  ""     },
     {"stats-eratio2",   1,  (void *)&prcopt_.eratio[1],  ""     },
+    {"stats-eratio5",   1,  (void *)&prcopt_.eratio[2],  ""     },
     {"stats-errphase",  1,  (void *)&prcopt_.err[1],     "m"    },
     {"stats-errphaseel",1,  (void *)&prcopt_.err[2],     "m"    },
     {"stats-errphasebl",1,  (void *)&prcopt_.err[3],     "m/10km"},
     {"stats-errdoppler",1,  (void *)&prcopt_.err[4],     "Hz"   },
+    {"stats-snrmax",    1,  (void *)&prcopt_.err[5],     "dB.Hz"},
     {"stats-stdbias",   1,  (void *)&prcopt_.std[0],     "m"    },
     {"stats-stdiono",   1,  (void *)&prcopt_.std[1],     "m"    },
     {"stats-stdtrop",   1,  (void *)&prcopt_.std[2],     "m"    },

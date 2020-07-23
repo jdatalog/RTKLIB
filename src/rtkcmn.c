@@ -126,6 +126,7 @@
 *           2016/09/17 1.41 suppress warnings
 *           2016/09/19 1.42 modify api deg2dms() to consider numerical error
 *           2017/04/11 1.43 delete EXPORT for global variables
+*           2018/10/10 1.44 modify api satexclude()
 *-----------------------------------------------------------------------------*/
 #define _POSIX_C_SOURCE 199506
 #include <stdarg.h>
@@ -143,6 +144,9 @@
 
 #define POLYCRC32   0xEDB88320u /* CRC32 polynomial */
 #define POLYCRC24Q  0x1864CFBu  /* CRC24Q polynomial */
+
+#define SQR(x)      ((x)*(x))
+#define MAX_VAR_EPH SQR(300.0)  /* max variance eph to reject satellite (m^2) */
 
 static const double gpst0[]={1980,1, 6,0,0,0}; /* gps time reference */
 static const double gst0 []={1999,8,22,0,0,0}; /* galileo system time reference */
@@ -182,7 +186,7 @@ const double chisqr[100]={      /* chi-sqr(n) (alpha=0.001) */
     138 ,139 ,140 ,142 ,143 ,144 ,145 ,147 ,148 ,149
 };
 const double lam_carr[MAXFREQ]={ /* carrier wave length (m) */
-    CLIGHT/FREQL1,CLIGHT/FREQL2,CLIGHT/FREQE5b,CLIGHT/FREQL5,CLIGHT/FREQE6,
+	CLIGHT/FREQL1,CLIGHT/FREQL2,CLIGHT/FREQL5,CLIGHT/FREQE6,
     CLIGHT/FREQE5ab,CLIGHT/FREQs
 };
 const prcopt_t prcopt_default={ /* defaults processing options */
@@ -193,12 +197,13 @@ const prcopt_t prcopt_default={ /* defaults processing options */
     0,1,0,0,1,0,                /* rcvstds,armaxiter,estion,esttrop,dynamics,tidecorr */
     1,0,0,0,0,                  /* niter,codesmooth,intpref,sbascorr,sbassatsel */
     0,0,                        /* rovpos,refpos */
+    WEIGHTOPT_ELEVATION,        /* weightmode */
     {300.0,300.0,300.0},        /* eratio[] */
-    {100.0,0.003,0.003,0.0,1.0},/* err[] */
+    {100.0,0.003,0.003,0.0,1.0,52.0}, /* err[] */
     {30.0,0.03,0.3},            /* std[] */
     {1E-4,1E-3,1E-4,1E-1,1E-2,0.0}, /* prn[] */
     5E-12,                      /* sclkstab */
-    {3.0,0.25,0.0,1E-7,1E-3,0.0,0.0,0.0}, /* thresar */
+    {3.0,0.25,0.0,1E-9,1E-5,0.0,0.0,0.0}, /* thresar */
     0.0,0.0,0.05,0.1,0.01,      /* elmaskar,elmaskhold,thresslip,varholdamb,gainholdamb */
     30.0,1000.0,30.0,           /* maxtdif,maxinno,maxgdop */
     {0},{0},{0},                /* baseline,ru,rb */
@@ -248,24 +253,24 @@ static char *obscodes[]={       /* observation code strings */
     "5B","5C","9A","9B","9C", "9X",""  ,""  ,""  ,""    /* 50-59 */
 };
 static unsigned char obsfreqs[]={
-    /* 1:L1/E1, 2:L2/B1, 3:E5b/B2, 4:L5/E5a/L3, 5:L6/LEX/B3, 6:E5(a+b), 7:S */
+    /* 1:L1/E1/B1, 2:L2/E5b/B2, 3:L5/E5a, 4:E6/LEX/B3, 5:E5(a+b), 6:S */
     0, 1, 1, 1, 1,  1, 1, 1, 1, 1, /*  0- 9 */
     1, 1, 1, 1, 2,  2, 2, 2, 2, 2, /* 10-19 */
-    2, 2, 2, 2, 4,  4, 4, 3, 3, 3, /* 20-29 */
-    5, 5, 5, 5, 5,  5, 5, 6, 6, 6, /* 30-39 */
-    2, 2, 5, 5, 4,  4, 4, 1, 1, 4, /* 40-49 */
-    4, 4, 7, 7, 7,  7, 0, 0, 0, 0  /* 50-59 */
+    2, 2, 2, 2, 3,  3, 3, 2, 2, 2, /* 20-29 */
+    4, 4, 4, 4, 4,  4, 4, 5, 5, 5, /* 30-39 */
+    1, 1, 3, 3, 3,  3, 3, 1, 1, 3, /* 40-49 */
+    3, 3, 6, 6, 6,  6, 0, 0, 0, 0  /* 50-59 */
 };
 static char codepris[7][MAXFREQ][16]={  /* code priority table */
 
-   /* L1/E1      L2/B1   E5b/B2  L5/E5a/L3 L6/LEX/B3     E5(a+b)  S */
-    {"CPYWMNSL","CLPYWMNDSX","IQX"   ,"IQX"   ,""        ,""      ,""    }, /* GPS */
-    {"PC"      ,"PC"        ,"IQX"   ,"IQX"   ,""        ,""      ,""    }, /* GLO */
-    {"CABXZ"   ,""          ,"IQX"   ,"IQX"   ,"ABCXZ"   ,"IQX"   ,""    }, /* GAL */
-    {"CSLXZ"   ,"SLX"       ,"IQX"   ,"IQX"   ,"SLX"     ,""      ,""    }, /* QZS */
-    {"C"       ,""          ,"IQX"   ,"IQX"   ,""        ,""      ,""    }, /* SBS */
-    {"IQX"     ,"IQX"       ,"IQX"   ,"IQX"   ,"IQX"     ,""      ,""    }, /* BDS */
-    {""        ,""          ,"ABCX"  ,"ABCX"  ,""        ,""      ,"ABCX"}  /* IRN */
+   /* L1/E1/B1   L2/E5b/B2      E5b/B3  L5/E5a/L3 E6/LEX     E5(a+b)  S */
+    {"CPYWMNSL","CLPYWMNDSX","IQX"   ,""        ,""      ,""    }, /* GPS */
+    {"PC"      ,"PC"        ,"IQX"   ,""        ,""      ,""    }, /* GLO */
+    {"CABXZ"   ,"IQX"       ,"IQX"   ,"ABCXZ"   ,"IQX"   ,""    }, /* GAL */
+    {"CSLXZ"   ,"SLX"       ,"IQX"   ,"SLX"     ,""      ,""    }, /* QZS */
+    {"C"       ,""          ,"IQX"   ,""        ,""      ,""    }, /* SBS */
+    {"IQX"     ,"IQX"       ,"IQX"   ,"IQX"     ,""      ,""    }, /* BDS */
+    {""        ,""          ,"ABCX"  ,""        ,""      ,"ABCX"}  /* IRN */
 };
 static fatalfunc_t *fatalfunc=NULL; /* fatal callback function */
 
@@ -522,11 +527,12 @@ extern void satno2id(int sat, char *id)
 /* test excluded satellite -----------------------------------------------------
 * test excluded satellite
 * args   : int    sat       I   satellite number
+*          double var       I   variance of ephemeris (m^2)
 *          int    svh       I   sv health flag
 *          prcopt_t *opt    I   processing options (NULL: not used)
 * return : status (1:excluded,0:not excluded)
 *-----------------------------------------------------------------------------*/
-extern int satexclude(int sat, int svh, const prcopt_t *opt)
+extern int satexclude(int sat, double var, int svh, const prcopt_t *opt)
 {
     int sys=satsys(sat,NULL);
     
@@ -540,6 +546,10 @@ extern int satexclude(int sat, int svh, const prcopt_t *opt)
     if (sys==SYS_QZS) svh&=0xFE; /* mask QZSS LEX health */
     if (svh) {
         trace(3,"unhealthy satellite: sat=%3d svh=%02X\n",sat,svh);
+        return 1;
+    }
+    if (var>MAX_VAR_EPH) {
+        trace(3,"invalid ura satellite: sat=%3d ura=%.2f\n",sat,sqrt(var));
         return 1;
     }
     return 0;
@@ -592,8 +602,8 @@ extern unsigned char obs2code(const char *obs, int *freq)
 * convert obs code to obs code string
 * args   : unsigned char code I obs code (CODE_???)
 *          int    *freq  IO     frequency (NULL: no output)
-*                               (1:L1/E1, 2:L2/B1, 3:L5/E5a/L3, 4:L6/LEX/B3,
-                                 5:E5b/B2, 6:E5(a+b), 7:S)
+*                               (1:L1/E1/B1, 2:L2/B2, 3:L5/E5a/L3/B3, 4:L6/LEX,
+                                 5:E5b, 6:E5(a+b), 7:S)
 * return : obs code string ("1C","1P","1P",...)
 * notes  : obs codes are based on reference [6] and qzss extension
 *-----------------------------------------------------------------------------*/
@@ -2623,39 +2633,34 @@ static void uniqseph(nav_t *nav)
     trace(4,"uniqseph: ns=%d\n",nav->ns);
 }
 /* ura index to ura nominal value (m) ----------------------------------------*/
-extern double uravalue(int ura, int sys)
+extern double uravalue(int sva)
 {
-    if (sys==SYS_GAL) {
-        if (ura>0 && ura<50)
-            return ura/100.0;
-        else if (ura>=50 && ura<75)
-            return (50.0+2.0*(ura-50.0))/100.0;
-        else if (ura>=75 && ura<100)
-            return (100.0+4.0*(ura-75.0))/100.0;
-        else if (ura>=100 && ura<=125)
-            return (200.0+16.0*(ura-100.0))/100.0;
-        else
-            return 6.0;
-    } else
-        return 0<=ura&&ura<15?ura_nominal[ura]:8192.0;
+    return 0<=sva&&sva<15?ura_nominal[sva]:8192.0;
 }
-extern int uraindex(double value, int sys)
+/* ura value (m) to ura index ------------------------------------------------*/
+extern int uraindex(double value)
 {
     int i;
-
-    if (sys==SYS_GAL) {
-        if (value>0 && value<0.5)
-            i=(int)(value*100+0.5);
-        else if (value>=0.5 && value<1.0)
-            i=50+(int)((value-0.5)/2*100+0.5);
-        else if (value>=1.0 && value<2.0)
-            i=75+(int)((value-1.0)/4*100);
-        else if (value>=2.0 && value<6.0)
-            i=100+(int)((value-2.0)/16*100+0.5);
-        else i=125;
-    } else
-        for (i=0;i<15;i++) if (ura_value[i]>=value) break;
+    for (i=0;i<15;i++) if (ura_value[i]>=value) break;
     return i;
+}
+/* galileo sisa index to sisa nominal value (m) ------------------------------*/
+extern double sisa_value(int sisa)
+{
+    if (sisa<= 49) return sisa*0.01;
+    if (sisa<= 74) return 0.5+(sisa- 50)*0.02;
+    if (sisa<= 99) return 1.0+(sisa- 75)*0.04;
+    if (sisa<=125) return 2.0+(sisa-100)*0.16;
+    return -1.0; /* unknown or NAPA */
+}
+/* galileo sisa value (m) to sisa index --------------------------------------*/
+extern int sisa_index(double value)
+{
+    if (value<0.0 || value>6.0) return 255; /* unknown or NAPA */
+    else if (value<=0.5) return (int)(value/0.01);
+    else if (value<=1.0) return (int)((value-0.5)/0.02)+50;
+    else if (value<=2.0) return (int)((value-1.0)/0.04)+75;
+    return (int)((value-2.0)/0.16)+100;
 }
 /* unique ephemerides ----------------------------------------------------------
 * unique ephemerides in navigation data and update carrier wave length
@@ -3361,7 +3366,7 @@ extern double satwavelen(int sat, int frq, const nav_t *nav)
     int i,sys=satsys(sat,NULL);
     
     if (sys==SYS_GLO) {
-        if (0<=frq&&frq<=1) {
+        if (0<=frq&&frq<=1) { /* L1,L2 */
             for (i=0;i<nav->ng;i++) {
                 if (nav->geph[i].sat!=sat) continue;
                 return CLIGHT/(freq_glo[frq]+dfrq_glo[frq]*nav->geph[i].frq);
@@ -3376,13 +3381,18 @@ extern double satwavelen(int sat, int frq, const nav_t *nav)
         else if (frq==1) return CLIGHT/FREQ2_CMP; /* B2 */
         else if (frq==2) return CLIGHT/FREQ3_CMP; /* B3 */
     }
-    else {
-        if      (frq==0) return CLIGHT/FREQL1; /* L1/E1 */
+    else if (sys==SYS_GAL) {
+        if      (frq==0) return CLIGHT/FREQL1; /* E1 */
+        else if (frq==1) return CLIGHT/FREQE5b; /* E5b */
+        else if (frq==2) return CLIGHT/FREQL5; /* E5a */
+        else if (frq==3) return CLIGHT/FREQE6; /* E6 */
+        else if (frq==5) return CLIGHT/FREQE5ab; /* E5ab */
+    }
+    else { /* GPS,QZS */
+        if      (frq==0) return CLIGHT/FREQL1; /* L1 */
         else if (frq==1) return CLIGHT/FREQL2; /* L2 */
-        else if (frq==2) return CLIGHT/FREQE5b; /* E5b */
-        else if (frq==3) return CLIGHT/FREQL5; /* L5/E5a */
-        else if (frq==4) return CLIGHT/FREQE6; /* L6/LEX */
-        else if (frq==5) return CLIGHT/FREQE5ab; /* E5a+b */
+        else if (frq==2) return CLIGHT/FREQL5; /* L5 */
+        else if (frq==3) return CLIGHT/FREQE6; /* L6/LEX */
         else if (frq==6) return CLIGHT/FREQs; /* S */
     }
     return 0.0;

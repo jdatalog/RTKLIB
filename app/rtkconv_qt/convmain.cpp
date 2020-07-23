@@ -686,6 +686,8 @@ void MainWindow::UpdateEnable(void)
 {
     QString FormatText=Format->currentText();
     int rnx=FormatText=="RINEX";
+    int sep_nav=RnxVer<3||SepNav;
+
     TimeY1         ->setEnabled(TimeStartF ->isChecked());
     TimeH1         ->setEnabled(TimeStartF ->isChecked());
     BtnTime1       ->setEnabled(TimeStartF ->isChecked());
@@ -697,12 +699,12 @@ void MainWindow::UpdateEnable(void)
     TimeUnitF      ->setEnabled(TimeStartF->isChecked()&&TimeEndF->isChecked());
     TimeUnit       ->setEnabled(TimeStartF->isChecked()&&TimeEndF->isChecked()&&TimeUnitF->isChecked());
     LabelTimeUnit  ->setEnabled(TimeUnit  ->isEnabled());
-    OutFileEna3    ->setEnabled(RnxVer<3&&(NavSys&SYS_GLO));
-    OutFileEna4    ->setEnabled(RnxVer<3&&(NavSys&SYS_SBS));
-    OutFileEna5    ->setEnabled(RnxVer<3&&(NavSys&SYS_QZS));
-    OutFileEna6    ->setEnabled(RnxVer<3&&(NavSys&SYS_GAL));
-    OutFileEna7    ->setEnabled(RnxVer<3&&(NavSys&SYS_CMP));
-    OutFileEna8    ->setEnabled(RnxVer<3&&(NavSys&SYS_IRN));
+    OutFileEna3    ->setEnabled(sep_nav&&(NavSys&SYS_GLO));
+    OutFileEna4    ->setEnabled(sep_nav&&(NavSys&SYS_SBS));
+    OutFileEna5    ->setEnabled(sep_nav&&(NavSys&SYS_QZS));
+    OutFileEna6    ->setEnabled(sep_nav&&(NavSys&SYS_GAL));
+    OutFileEna7    ->setEnabled(sep_nav&&(NavSys&SYS_CMP));
+    OutFileEna8    ->setEnabled(sep_nav&&(NavSys&SYS_IRN));
     OutFileEna9    ->setEnabled(!rnx);
     OutDir         ->setEnabled(OutDirEna  ->isChecked());
     LabelOutDir    ->setEnabled(OutDirEna  ->isChecked());
@@ -846,7 +848,9 @@ void MainWindow::ConvertFile(void)
     conversionThread->rnxopt.outiono=OutIono;
     conversionThread->rnxopt.outtime=OutTime;
     conversionThread->rnxopt.outleaps=OutLeaps;
-    
+    conversionThread->rnxopt.sep_nav=SepNav;
+    conversionThread->rnxopt.ttol=TimeTol;
+
     QStringList exsatsLst=ExSats.split(" ");
     foreach (const QString & sat,exsatsLst)
     {
@@ -971,10 +975,13 @@ void MainWindow::LoadOpt(void)
     CodeMask[5]         =ini.value ("opt/codemask_6",mask).toString();
     AutoPos             =ini.value ("opt/autopos",     0).toInt();
     ScanObs             =ini.value ("opt/scanobs",     0).toInt();
+    HalfCyc             =ini.value ("opt/halfcyc",     0).toInt();
     OutIono             =ini.value ("opt/outiono",     0).toInt();
     OutTime             =ini.value ("opt/outtime",     0).toInt();
     OutLeaps            =ini.value ("opt/outleaps",    0).toInt();
-    
+    SepNav              =ini.value ("opt/sepnav",      0).toInt();
+    TimeTol             =ini.value ("opt/timetol",  0.005).toDouble();
+
     TimeStartF ->setChecked(ini.value("set/timestartf",  0).toBool());
     TimeEndF   ->setChecked(ini.value("set/timeendf",    0).toBool());
     TimeIntF   ->setChecked(ini.value("set/timeintf",    0).toBool());
@@ -1064,8 +1071,9 @@ void MainWindow::SaveOpt(void)
     ini.setValue ("opt/scanobs",    ScanObs);
     ini.setValue ("opt/outiono",    OutIono);
     ini.setValue ("opt/outtime",    OutTime);
-    ini.setValue ("opt/outleaps",   OutLeaps);
-    
+    ini.setValue ("opt/sepnav",     SepNav);
+    ini.setValue ("opt/timetol",    TimeTol);
+
     ini.setValue ("set/timestartf", TimeStartF ->isChecked());
     ini.setValue ("set/timeendf",   TimeEndF   ->isChecked());
     ini.setValue ("set/timeintf",   TimeIntF   ->isChecked());
