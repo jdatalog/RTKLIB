@@ -9,7 +9,7 @@ SRC    = ../../../src
 INCLUDE= -I$(SRC)
 OPTIONS= -DTRACE -DENAGLO -DENAQZS -DENAGAL -DENACMP -DENAIRN -DNFREQ=4 -DNEXOBS=3
 
-CFLAGS = -O3 -ansi -pedantic -Wall -Wno-unused-but-set-variable $(INCLUDE) $(OPTIONS) -g
+CFLAGS = -fPIC -O3 -ansi -pedantic -Wall -Wno-unused-but-set-variable $(INCLUDE) $(OPTIONS) -g
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Darwin)

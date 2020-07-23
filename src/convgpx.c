@@ -22,7 +22,7 @@ static const char *XMLNS="http://www.topografix.com/GPX/1/1";
 
 /* output waypoint -----------------------------------------------------------*/
 static void outpoint(FILE *fp, gtime_t time, const double *pos,
-                     const char *label, int stat, int outalt, int outtime)
+                     const char *label, int stat, int outalt, int outtime, int nbSat)
 {
     /* fix, float, sbas and ppp are rtklib extentions to GPX */
     const char *fix_label[]={"fix","float","sbas","dgps","3d","ppp"};
@@ -30,7 +30,8 @@ static void outpoint(FILE *fp, gtime_t time, const double *pos,
     
     fprintf(fp,"<wpt lat=\"%.9f\" lon=\"%.9f\">\n",pos[0]*R2D,pos[1]*R2D);
     if (outalt) {
-        fprintf(fp," <ele>%.4f</ele>\n",pos[2]-(outalt==2?geoidh(pos):0.0));
+       /* fprintf(fp," <ele>%.4f</ele>\n",pos[2]-(outalt==2?geoidh(pos):0.0));*/
+        fprintf(fp," <ele>%.4f</ele>\n",pos[2]);
     }
     if (outtime) {
         if      (outtime==2) time=gpst2utc(time);
@@ -39,9 +40,10 @@ static void outpoint(FILE *fp, gtime_t time, const double *pos,
         fprintf(fp," <time>%04.0f-%02.0f-%02.0fT%02.0f:%02.0f:%05.2fZ</time>\n",
                 ep[0],ep[1],ep[2],ep[3],ep[4],ep[5]);
     }
-    if (outalt==2) {
+    fprintf(fp,"   <sat>%d</sat>\n", nbSat);
+   /* if (outalt==2) {
         fprintf(fp," <geoidheight>%.4f</geoidheight>\n",geoidh(pos));
-    }
+    }*/
     if (stat>=1&&stat<=6) {
         fprintf(fp," <fix>%s</fix>\n",fix_label[stat-1]);
     }
@@ -54,6 +56,7 @@ static void outpoint(FILE *fp, gtime_t time, const double *pos,
 static void outtrack(FILE *fp, const solbuf_t *solbuf, int outalt, int outtime)
 {
     gtime_t time;
+    const char *fix_label[]={"fix","float","sbas","dgps","3d","ppp"};
     double pos[3],ep[6];
     int i;
     
@@ -64,7 +67,8 @@ static void outtrack(FILE *fp, const solbuf_t *solbuf, int outalt, int outtime)
         fprintf(fp,"  <trkpt lat=\"%.9f\" lon=\"%.9f\">\n",pos[0]*R2D,
                 pos[1]*R2D);
         if (outalt) {
-            fprintf(fp,"   <ele>%.4f</ele>\n",pos[2]-(outalt==2?geoidh(pos):0.0));
+/*          fprintf(fp,"   <ele>%.4f</ele>\n",pos[2]-(outalt==2?geoidh(pos):0.0));*/
+            fprintf(fp,"   <ele>%.4f</ele>\n",pos[2]);
         }
         if (outtime) {
             time=solbuf->data[i].time;
@@ -74,9 +78,15 @@ static void outtrack(FILE *fp, const solbuf_t *solbuf, int outalt, int outtime)
             fprintf(fp,"   <time>%04.0f-%02.0f-%02.0fT%02.0f:%02.0f:%05.2fZ</time>\n",
                     ep[0],ep[1],ep[2],ep[3],ep[4],ep[5]);
         }
-        if (outalt==2) {
+        fprintf(fp,"   <sat>%d</sat>\n",solbuf->data[i].ns);
+	
+     /*   if (outalt==2) {
             fprintf(fp,"   <geoidheight>%.4f</geoidheight>\n",geoidh(pos));
+        } */
+        if (solbuf->data[i].stat>=1&&solbuf->data[i].stat<=6) {
+          fprintf(fp," <fix>%s</fix>\n",fix_label[solbuf->data[i].stat-1]);
         }
+
         fprintf(fp,"  </trkpt>\n");
     }
     fprintf(fp," </trkseg>\n");
@@ -102,13 +112,13 @@ static int savegpx(const char *file, const solbuf_t *solbuf, int outtrk,
         for (i=0;i<solbuf->n;i++) {
             ecef2pos(solbuf->data[i].rr,pos);
             outpoint(fp,solbuf->data[i].time,pos,"",solbuf->data[i].stat,outalt,
-                     outtime);
+                     outtime, solbuf->data[i].ns);
         }
     }
     /* output waypoint of ref position */
     if (norm(solbuf->rb,3)>0.0) {
         ecef2pos(solbuf->rb,pos);
-        outpoint(fp,solbuf->data[0].time,pos,"Reference Position",0,outalt,0);
+        outpoint(fp,solbuf->data[0].time,pos,"Reference Position",0,outalt,0,0);
     }
     /* output track */
     if (outtrk) {

@@ -137,13 +137,13 @@ int main(int argc, char **argv)
 	    prcopt.navsys = 0;
             for (p=argv[++i];*p;p++) {
                switch (*p) {
-                    case 'G': prcopt.navsys|=SYS_GPS;break;
-                    case 'R': prcopt.navsys|=SYS_GLO;break;
-                    case 'E': prcopt.navsys|=SYS_GAL;break;
-                    case 'J': prcopt.navsys|=SYS_QZS;break;
-                    case 'C': prcopt.navsys|=SYS_CMP;break;
-                    case 'I': prcopt.navsys|=SYS_IRN;break;
-                    case 'S': prcopt.navsys|=SYS_SBS;break;
+                    case 'G': prcopt.navsys|=SYS_GPS;
+                    case 'R': prcopt.navsys|=SYS_GLO;
+                    case 'E': prcopt.navsys|=SYS_GAL;
+                    case 'J': prcopt.navsys|=SYS_QZS;
+                    case 'C': prcopt.navsys|=SYS_CMP;
+                    case 'I': prcopt.navsys|=SYS_IRN;
+                    case 'S': prcopt.navsys|=SYS_SBS;
                }
               if (!(p=strchr(p,','))) break;
             }

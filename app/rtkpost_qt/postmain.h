@@ -130,27 +130,26 @@ public:
 	
 	// options
 	int PosMode,Freq,Solution,DynamicModel,IonoOpt,TropOpt,RcvBiasEst;
-	int ARIter,MinFixSats,MinHoldSats,MinDropSats,ARFilter,RcvStds,SyncSol;
-	int NumIter,CodeSmooth,TideCorr;
-	int OutCntResetAmb,FixCntHoldAmb,LockCntFixAmb,RovPosType,RefPosType;
+    int ARIter,MinFixSats,MinHoldSats,MinDropSats,ARFilter,RcvStds;
+    int NumIter,CodeSmooth,TideCorr;
+    int OutCntResetAmb,FixCntHoldAmb,LockCntFixAmb,RovPosType,RefPosType;
 	int SatEphem,NavSys;
 	int RovAntPcv,RefAntPcv,AmbRes,GloAmbRes,BdsAmbRes;
-	int OutputHead,OutputOpt,OutputSingle,OutputDatum;
+    int OutputHead,OutputOpt,OutputSingle,OutputDatum;
 	int OutputHeight,OutputGeoid,DebugTrace,DebugStatus,BaseLineConst;
 	int SolFormat,TimeFormat,LatLonFormat,IntpRefObs,NetRSCorr,SatClkCorr;
 	int SbasCorr,SbasCorr1,SbasCorr2,SbasCorr3,SbasCorr4,TimeDecimal;
 	int SolStatic,SbasSat,MapFunc;
 	int PosOpt[6];
-        double ElMask,MaxAgeDiff,RejectThres,VarHoldAmb,GainHoldAmb,RejectGdop;
+    double ElMask,MaxAgeDiff,RejectThres,VarHoldAmb,GainHoldAmb,RejectGdop;
 	double MeasErrR1,MeasErrR2,MeasErr2,MeasErr3,MeasErr4,MeasErr5;
 	double SatClkStab,RovAntE,RovAntN,RovAntU,RefAntE,RefAntN,RefAntU;
 	double PrNoise1,PrNoise2,PrNoise3,PrNoise4,PrNoise5;
 	double ValidThresAR,ElMaskAR,ElMaskHold,SlipThres;
-	double MaxPosVarAR,GloHwBias,ThresAR3,ThresAR4;
+    double MaxPosVarAR,GloHwBias,ThresAR2,ThresAR3;
 	double RovPos[3],RefPos[3],BaseLine[2];
-	double MaxSolStd;
-
-	snrmask_t SnrMask;
+    double MaxSolStd;
+    snrmask_t SnrMask;
 	exterr_t ExtErr;
 	
     QString RnxOpts1,RnxOpts2,PPPOpts;

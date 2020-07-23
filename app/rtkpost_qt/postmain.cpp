@@ -903,7 +903,6 @@ int MainForm::GetOption(prcopt_t &prcopt, solopt_t &solopt,
     int sat,ex;
     
     // processing options
-    // processing options
     prcopt.mode     =PosMode;
     prcopt.soltype  =Solution;
     prcopt.nf       =Freq+1;
@@ -929,12 +928,6 @@ int MainForm::GetOption(prcopt_t &prcopt, solopt_t &solopt,
     prcopt.tidecorr =TideCorr;
     prcopt.armaxiter=ARIter;
     prcopt.niter    =NumIter;
-    prcopt.syncsol  =SyncSol;
-    prcopt.minfixsats=MinFixSats;
-    prcopt.minholdsats=MinHoldSats;
-    prcopt.mindropsats=MinDropSats;
-    prcopt.arfilter=ARFilter;
-    prcopt.rcvstds=RcvStds;
     prcopt.intpref  =IntpRefObs;
     prcopt.sbassatsel=SbasSat;
     prcopt.eratio[0]=MeasErrR1;
@@ -950,19 +943,14 @@ int MainForm::GetOption(prcopt_t &prcopt, solopt_t &solopt,
     prcopt.prn[4]   =PrNoise5;
     prcopt.sclkstab =SatClkStab;
     prcopt.thresar[0]=ValidThresAR;
-    prcopt.thresar[1]=MaxPosVarAR;
-    prcopt.thresar[2]=GloHwBias;
-    prcopt.thresar[3]=ThresAR3;
-    prcopt.thresar[4]=ThresAR4;
+    prcopt.thresar[1]=ThresAR2;
+    prcopt.thresar[2]=ThresAR3;
     prcopt.elmaskar =ElMaskAR*D2R;
     prcopt.elmaskhold=ElMaskHold*D2R;
     prcopt.thresslip=SlipThres;
     prcopt.maxtdiff =MaxAgeDiff;
     prcopt.maxgdop  =RejectGdop;
     prcopt.maxinno  =RejectThres;
-    prcopt.varholdamb=VarHoldAmb;
-    prcopt.gainholdamb=GainHoldAmb;
-    prcopt.outsingle=OutputSingle;
     if (BaseLineConst) {
         prcopt.baseline[0]=BaseLine[0];
         prcopt.baseline[1]=BaseLine[1];
@@ -1272,27 +1260,19 @@ void MainForm::LoadOpt(void)
     GloAmbRes          =ini.value("opt/gloambres",      1).toInt();
     BdsAmbRes          =ini.value("opt/bdsambres",      1).toInt();
     ValidThresAR       =ini.value  ("opt/validthresar", 3.0).toDouble();
-    MaxPosVarAR  =ini.value  ("opt/thresar[1]",3.0).toDouble();
-    GloHwBias    =ini.value  ("opt/thresar[2]",3.0).toDouble();
+    ThresAR2           =ini.value  ("opt/thresar2",  0.9999).toDouble();
+    ThresAR3           =ini.value  ("opt/thresar3",    0.25).toDouble();
     LockCntFixAmb      =ini.value("opt/lockcntfixamb",  0).toInt();
-    FixCntHoldAmb=ini.value  ("opt/fixcntholdamb", 20).toInt();
+    FixCntHoldAmb      =ini.value("opt/fixcntholdamb", 10).toInt();
     ElMaskAR           =ini.value  ("opt/elmaskar",     0.0).toDouble();
     ElMaskHold         =ini.value  ("opt/elmaskhold",   0.0).toDouble();
     OutCntResetAmb     =ini.value("opt/outcntresetbias",5).toInt();
     SlipThres          =ini.value  ("opt/slipthres",   0.05).toDouble();
     MaxAgeDiff         =ini.value  ("opt/maxagediff",  30.0).toDouble();
     RejectThres        =ini.value  ("opt/rejectthres", 30.0).toDouble();
-    VarHoldAmb  =ini.value  ("opt/varholdamb", 0.1).toDouble();
-    GainHoldAmb =ini.value  ("opt/gainholdamb", 0.01).toDouble();
     RejectGdop         =ini.value  ("opt/rejectgdop",  30.0).toDouble();
     ARIter             =ini.value("opt/ariter",         1).toInt();
     NumIter            =ini.value("opt/numiter",        1).toInt();
-    MinFixSats  =ini.value  ("opt/minfixsats",     4).toInt();
-    MinHoldSats =ini.value  ("opt/minholdsats",    5).toInt();
-    MinDropSats =ini.value  ("opt/mindropsats",   10).toInt();
-    SyncSol	 =ini.value  ("opt/syncsol",       0).toInt();
-    ARFilter	 =ini.value  ("opt/arfilter",      1).toInt();
-    RcvStds	 =ini.value  ("opt/rcvstds",       0).toInt();
     CodeSmooth         =ini.value("opt/codesmooth",     0).toInt();
     BaseLine[0]        =ini.value  ("opt/baselinelen",  0.0).toDouble();
     BaseLine[1]        =ini.value  ("opt/baselinesig",  0.0).toDouble();
@@ -1305,8 +1285,6 @@ void MainForm::LoadOpt(void)
     FieldSep           =ini.value ("opt/fieldsep",      "").toString();
     OutputHead         =ini.value("opt/outputhead",     1).toInt();
     OutputOpt          =ini.value("opt/outputopt",      1).toInt();
-    OutputSingle =ini.value  ("opt/outsingle",          0).toInt();
-    MaxSolStd    =ini.value  ("opt/maxsolstd",  0.0).toDouble();
     OutputDatum        =ini.value("opt/outputdatum",    0).toInt();
     OutputHeight       =ini.value("opt/outputheight",   0).toInt();
     OutputGeoid        =ini.value("opt/outputgeoid",    0).toInt();
@@ -1483,6 +1461,8 @@ void MainForm::SaveOpt(void)
     ini.setValue("opt/gloambres",   GloAmbRes   );
     ini.setValue("opt/bdsambres",   BdsAmbRes   );
     ini.setValue  ("opt/validthresar",ValidThresAR);
+    ini.setValue  ("opt/thresar2",    ThresAR2    );
+    ini.setValue  ("opt/thresar3",    ThresAR3    );
     ini.setValue("opt/lockcntfixamb",LockCntFixAmb);
     ini.setValue("opt/fixcntholdamb",FixCntHoldAmb);
     ini.setValue  ("opt/elmaskar",    ElMaskAR    );

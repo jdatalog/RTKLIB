@@ -58,7 +58,7 @@ extern "C" {
 
 #define VER_RTKLIB  "demo5"             /* library version */
 
-#define PATCH_LEVEL "b33"               /* patch level */
+#define PATCH_LEVEL "b33c"               /* patch level */
 
 #define COPYRIGHT_RTKLIB \
             "Copyright (C) 2007-2019 T.Takasu\nAll rights reserved."
@@ -80,21 +80,21 @@ extern "C" {
 
 #define MAXFREQ     6                   /* max NFREQ */
 
-#define FREQL1      1.57542E9           /* L1/E1/B1  frequency (Hz) */
+#define FREQL1      1.57542E9           /* L1/E1  frequency (Hz) */
 #define FREQL2      1.22760E9           /* L2     frequency (Hz) */
 #define FREQE5b     1.20714E9           /* E5b    frequency (Hz) */
 #define FREQL5      1.17645E9           /* L5/E5a frequency (Hz) */
 #define FREQE6      1.27875E9           /* E6/LEX frequency (Hz) */
-#define FREQE5ab    1.191795E9          /* E5a+b/B2  frequency (Hz) */
+#define FREQE5ab    1.191795E9          /* E5a+b  frequency (Hz) */
 #define FREQs       2.492028E9           /* S      frequency (Hz) */
+#define FREQ1_CMP   1.561098E9          /* BeiDou B1 frequency (Hz) */
+#define FREQ2_CMP   1.20714E9           /* BeiDou B2 frequency (Hz) */
+#define FREQ3_CMP   1.26852E9           /* BeiDou B3 frequency (Hz) */
 #define FREQ1_GLO   1.60200E9           /* GLONASS G1 base frequency (Hz) */
 #define DFRQ1_GLO   0.56250E6           /* GLONASS G1 bias frequency (Hz/n) */
 #define FREQ2_GLO   1.24600E9           /* GLONASS G2 base frequency (Hz) */
 #define DFRQ2_GLO   0.43750E6           /* GLONASS G2 bias frequency (Hz/n) */
 #define FREQ3_GLO   1.202025E9          /* GLONASS G3 frequency (Hz) */
-#define FREQ1_CMP   1.561098E9          /* BeiDou B1 frequency (Hz) */
-#define FREQ2_CMP   1.20714E9           /* BeiDou B2 frequency (Hz) */
-#define FREQ3_CMP   1.26852E9           /* BeiDou B3 frequency (Hz) */
 
 #define EFACT_GPS   1.0                 /* error factor: GPS */
 #define EFACT_GLO   1.5                 /* error factor: GLONASS */
@@ -559,6 +559,7 @@ typedef struct {        /* observation data record */
     unsigned char code[NFREQ+NEXOBS]; /* code indicator (CODE_???) */
     unsigned char qualL[NFREQ+NEXOBS]; /* quality of carrier phase measurement */
     unsigned char qualP[NFREQ+NEXOBS]; /* quality of pseudorange measurement */
+    unsigned char freq; /* GLONASS frequency channel (0-13) */
     double L[NFREQ+NEXOBS]; /* observation data carrier-phase (cycle) */
     double P[NFREQ+NEXOBS]; /* observation data pseudorange (m) */
     float  D[NFREQ+NEXOBS]; /* observation data doppler frequency (Hz) */
@@ -1251,6 +1252,7 @@ typedef struct {        /* RTK control/result type */
     double *xa,*Pa;     /* fixed states and their covariance */
     int nfix;           /* number of continuous fixes of ambiguity */
     int excsat;         /* index of next satellite to be excluded for partial ambiguity resolution */
+    int nb_ar;          /* number of ambiguities used for AR last epoch */
 	double com_bias;    /* phase bias common between all sats (used to be distributed to all sats */
     char holdamb;       /* set if fix-and-hold has occurred at least once */
     ambc_t ambc[MAXSAT]; /* ambiguity control */
@@ -1563,6 +1565,7 @@ EXPORT void tracehnav(int level, const nav_t *nav);
 EXPORT void tracepeph(int level, const nav_t *nav);
 EXPORT void tracepclk(int level, const nav_t *nav);
 EXPORT void traceb   (int level, const unsigned char *p, int n);
+EXPORT int gettracelevel(void);
 
 /* platform dependent functions ----------------------------------------------*/
 EXPORT int execcmd(const char *cmd);

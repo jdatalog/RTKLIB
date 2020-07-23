@@ -330,9 +330,10 @@ void CodeOptDialog::UpdateEnable(void)
     E24->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_L5));
     E25->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_L5));
     E26->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_L5));
-    E27->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E5ab));
-    E28->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E5ab));
-    E29->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E5ab));
+    
+    E27->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_L2));
+    E28->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_L2));
+    E29->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_L2));
     E30->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E6));
     E31->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E6));
     E32->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E6));
@@ -341,6 +342,7 @@ void CodeOptDialog::UpdateEnable(void)
     E37->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E5ab));
     E38->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E5ab));
     E39->setEnabled((NavSys&SYS_GAL)&&(FreqType&FREQTYPE_E5ab));
+    
     J01->setEnabled((NavSys&SYS_QZS)&&(FreqType&FREQTYPE_L1));
     J07->setEnabled((NavSys&SYS_QZS)&&(FreqType&FREQTYPE_L1));
     J08->setEnabled((NavSys&SYS_QZS)&&(FreqType&FREQTYPE_L1));

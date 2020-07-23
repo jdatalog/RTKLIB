@@ -100,7 +100,7 @@
 
 #define SQR(x)      ((x)*(x))
 
-#define NUMSYS      6                   /* number of systems */
+#define NUMSYS      7                   /* number of systems */
 #define MAXRNXLEN   (16*MAXOBSTYPE+4)   /* max rinex record length */
 #define MAXPOSHEAD  1024                /* max head line position */
 #define MINFREQ_GLO -7                  /* min frequency number glonass */
@@ -2079,12 +2079,12 @@ static int obsindex(double ver, int sys, const unsigned char *code,
                     return i;
             }
             else {
-				id=code2obs(code[i],NULL);
+                id=code2obs(code[i],NULL);
                 if (id[0]==tobs[1]) return i;
             }
         }
         else { /* ver.3 */
-			id=code2obs(code[i],NULL);
+            id=code2obs(code[i],NULL);
             if (!strcmp(id,tobs+1)) return i;
         }
     }
@@ -2200,6 +2200,17 @@ extern int outrnxobsb(FILE *fp, const rnxopt_t *opt, const obsd_t *obs, int n,
                 case 'S': outrnxobsf(fp,obs[ind[i]].SNR[k]*0.25,-1,-1); break;
             }
         }
+
+        /* set trace level to 1 generate CSV file of raw observations   */
+        if (gettracelevel()==1) {
+            trace(1,",%16.2f,%3d,%13.2f,%13.2f,%9.2f,%2.0f,%1d,%1d,%13.2f,%13.2f,%9.2f,%2.0f,%1d,%1d\n",
+                obs[0].time.time + obs[0].time.sec, obs[ind[i]].sat,
+                obs[ind[i]].P[0], obs[ind[i]].L[0], obs[ind[i]].D[0],
+                obs[ind[i]].SNR[0]*0.25, obs[ind[i]].LLI[0], obs[ind[i]].qualL[0],
+                obs[ind[i]].P[1], obs[ind[i]].L[1], obs[ind[i]].D[1],
+                obs[ind[i]].SNR[1]*0.25, obs[ind[i]].LLI[1], obs[ind[i]].qualL[1]);
+        }
+
         if (opt->rnxver>2.99&&fprintf(fp,"\n")==EOF) return 0;
     }
 

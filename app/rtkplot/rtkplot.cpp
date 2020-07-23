@@ -65,7 +65,6 @@ USEFORM("satdlg.cpp", SatDialog);
 USEFORM("plotmain.cpp", Plot);
 USEFORM("mapdlg.cpp", MapAreaDialog);
 USEFORM("gmview.cpp", GoogleMapView);
-USEFORM("geview.cpp", GoogleEarthView);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -74,30 +73,29 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->Initialize();
 		Application->Title = "RTKPLOT";
 		Application->CreateForm(__classid(TPlot), &Plot);
-         Application->CreateForm(__classid(TPlotOptDialog), &PlotOptDialog);
-         Application->CreateForm(__classid(TSatDialog), &SatDialog);
-         Application->CreateForm(__classid(TRefDialog), &RefDialog);
-         Application->CreateForm(__classid(TAboutDialog), &AboutDialog);
-         Application->CreateForm(__classid(TSpanDialog), &SpanDialog);
-         Application->CreateForm(__classid(TTimeDialog), &TimeDialog);
-         Application->CreateForm(__classid(TConnectDialog), &ConnectDialog);
-         Application->CreateForm(__classid(TSerialOptDialog), &SerialOptDialog);
-         Application->CreateForm(__classid(TTcpOptDialog), &TcpOptDialog);
-         Application->CreateForm(__classid(TCmdOptDialog), &CmdOptDialog);
-         Application->CreateForm(__classid(TFileOptDialog), &FileOptDialog);
-         Application->CreateForm(__classid(TKeyDialog), &KeyDialog);
-         Application->CreateForm(__classid(TTextViewer), &TextViewer);
-         Application->CreateForm(__classid(TViewerOptDialog), &ViewerOptDialog);
-         Application->CreateForm(__classid(TPntDialog), &PntDialog);
-         Application->CreateForm(__classid(TConfDialog), &ConfDialog);
-         Application->CreateForm(__classid(TGoogleEarthView), &GoogleEarthView);
-         Application->CreateForm(__classid(TFtpOptDialog), &FtpOptDialog);
-         Application->CreateForm(__classid(TConsole), &Console);
-         Application->CreateForm(__classid(TGoogleMapView), &GoogleMapView);
-         Application->CreateForm(__classid(TMapAreaDialog), &MapAreaDialog);
-         Application->CreateForm(__classid(TSkyImgDialog), &SkyImgDialog);
-         Application->CreateForm(__classid(TVecMapDialog), &VecMapDialog);
-         Application->Run();
+		Application->CreateForm(__classid(TPlotOptDialog), &PlotOptDialog);
+		Application->CreateForm(__classid(TSatDialog), &SatDialog);
+		Application->CreateForm(__classid(TRefDialog), &RefDialog);
+		Application->CreateForm(__classid(TAboutDialog), &AboutDialog);
+		Application->CreateForm(__classid(TSpanDialog), &SpanDialog);
+		Application->CreateForm(__classid(TTimeDialog), &TimeDialog);
+		Application->CreateForm(__classid(TConnectDialog), &ConnectDialog);
+		Application->CreateForm(__classid(TSerialOptDialog), &SerialOptDialog);
+		Application->CreateForm(__classid(TTcpOptDialog), &TcpOptDialog);
+		Application->CreateForm(__classid(TCmdOptDialog), &CmdOptDialog);
+		Application->CreateForm(__classid(TFileOptDialog), &FileOptDialog);
+		Application->CreateForm(__classid(TKeyDialog), &KeyDialog);
+		Application->CreateForm(__classid(TTextViewer), &TextViewer);
+		Application->CreateForm(__classid(TViewerOptDialog), &ViewerOptDialog);
+		Application->CreateForm(__classid(TPntDialog), &PntDialog);
+		Application->CreateForm(__classid(TConfDialog), &ConfDialog);
+		Application->CreateForm(__classid(TFtpOptDialog), &FtpOptDialog);
+		Application->CreateForm(__classid(TConsole), &Console);
+		Application->CreateForm(__classid(TGoogleMapView), &GoogleMapView);
+		Application->CreateForm(__classid(TMapAreaDialog), &MapAreaDialog);
+		Application->CreateForm(__classid(TSkyImgDialog), &SkyImgDialog);
+		Application->CreateForm(__classid(TVecMapDialog), &VecMapDialog);
+		Application->Run();
 	}
 	catch (Exception &exception)
 	{

@@ -445,7 +445,6 @@ void OptDialog::GetOpt(void)
     GloAmbRes	 ->setCurrentIndex(mainForm->GloAmbRes);
     BdsAmbRes	 ->setCurrentIndex(mainForm->BdsAmbRes);
     ValidThresAR ->setText(QString::number(mainForm->ValidThresAR,'g',3));
-    MaxPosVarAR  ->setText(QString::number(mainForm->MaxPosVarAR,'f',4));
     GloHwBias    ->setText(QString::number(mainForm->GloHwBias,'g',3));
     OutCntResetAmb->setText(QString::number(mainForm->OutCntResetAmb));
     FixCntHoldAmb->setText(QString::number(mainForm->FixCntHoldAmb));
@@ -463,7 +462,7 @@ void OptDialog::GetOpt(void)
     MinFixSats   ->setText(QString::number(mainForm->MinFixSats));
     MinHoldSats  ->setText(QString::number(mainForm->MinHoldSats));
     MinDropSats	 ->setText(QString::number(mainForm->MinDropSats));
-    SyncSol		 ->setCurrentIndex(mainForm->SyncSol);
+    MaxPosVarAR  ->setText(QString::number(mainForm->MaxPosVarAR,'f',4));
     ARFilter	         ->setCurrentIndex(mainForm->ARFilter);
     RcvStds	         ->setCurrentIndex(mainForm->RcvStds);
     BaselineLen	 ->setText(QString::number(mainForm->BaseLine[0],'f',3));

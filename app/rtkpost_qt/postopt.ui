@@ -177,7 +177,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="TabSheet1">
       <property name="toolTip">
@@ -2262,7 +2262,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
+          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2779,7 +2779,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
+          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2799,7 +2799,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
+          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2919,7 +2919,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
+          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -2981,7 +2981,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
+          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -3043,7 +3043,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../rtkget_qt/rtkget_qt.qrc">
+          <iconset resource="../rtkconv_qt/rtkconv_qt.qrc">
            <normaloff>:/buttons/doc.bmp</normaloff>:/buttons/doc.bmp</iconset>
          </property>
          <property name="flat">
@@ -3515,7 +3515,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../rtkget_qt/rtkget_qt.qrc"/>
+  <include location="../rtkconv_qt/rtkconv_qt.qrc"/>
  </resources>
  <connections/>
 </ui>
