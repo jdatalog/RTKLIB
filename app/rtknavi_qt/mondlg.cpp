@@ -1874,7 +1874,7 @@ void MonitorDialog::ShowRtcmSsr(void)
 	gtime_t time;
 	ssr_t ssr[MAXSAT];
     int i,k;
-	char tstr[64],id[32];
+    char tstr[64],id[32],buff[256]="",*p;
 
 	rtksvrlock(&rtksvr);
 	time=rtksvr.rtk.sol.time;
@@ -1913,9 +1913,21 @@ void MonitorDialog::ShowRtcmSsr(void)
         Console->setItem(i,j++, new QTableWidgetItem(QString::number(ssr[i].dclk[1]*1E3,'f',3)));
         Console->setItem(i,j++, new QTableWidgetItem(QString::number(ssr[i].dclk[2]*1E3,'f',5)));
         Console->setItem(i,j++, new QTableWidgetItem(QString::number(ssr[i].hrclk,'f',3)));
-        for (k=1;k<MAXCODE;k++) {
-            Console->setItem(i,j++, new QTableWidgetItem(QString::number(ssr[i].cbias[k],'f',2)));
-		}
+
+        buff[0]='\0';
+        for (p=buff,k=0;k<MAXCODE;k++) {
+            if (ssr[i].cbias[k]==0.0) continue;
+            p+=sprintf(p,"%s:%.3f ",code2obs(k+1,NULL),ssr[i].cbias[k]);
+        }
+        Console->setItem(i,j++, new QTableWidgetItem( QString::fromStdString(buff)));
+
+        buff[0]='\0';
+        for (p=buff,k=0;k<MAXCODE;k++) {
+            if (ssr[i].pbias[k]==0.0) continue;
+            p+=sprintf(p,"%s:%.3f ",code2obs(k+1,NULL),ssr[i].pbias[k]);
+        }
+        Console->setItem(i,j++, new QTableWidgetItem( QString::fromStdString(buff)));
+
 	}
 }
 //---------------------------------------------------------------------------
